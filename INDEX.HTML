@@ -1,0 +1,1746 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Our Garden 🌸</title>
+<link href="https://fonts.googleapis.com/css2?family=Caveat:wght@400;600&family=Quicksand:wght@400;500;600&display=swap" rel="stylesheet"/>
+<style>
+/* ── GLOBAL ── */
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: sans-serif; background: rgb(245,245,220); min-height: 100vh; overflow: hidden; }
+
+/* ── SCREENS ── */
+.screen { display: none; width: 100%; min-height: 100vh; }
+.screen.active { display: block; }
+
+/* ══════════════════════════════
+   WELCOME SCREEN
+══════════════════════════════ */
+#welcome-screen {
+  background: rgb(245,245,220);
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  min-height: 100vh; padding: 40px 24px;
+  gap: 0;
+}
+
+.welcome-title {
+  font-family: 'Caveat', cursive;
+  font-size: 38px; font-weight: 600;
+  color: #333; text-align: center;
+  margin-bottom: 6px;
+}
+.welcome-sub {
+  font-family: 'Caveat', cursive;
+  font-size: 18px; color: #777;
+  text-align: center; margin-bottom: 40px;
+  font-style: italic;
+}
+
+/* SVG welcome illustration */
+.welcome-art { margin-bottom: 40px; }
+
+.welcome-btns {
+  display: flex; flex-direction: column;
+  gap: 14px; width: 100%; max-width: 280px;
+}
+
+.welcome-btn {
+  padding: 16px 28px;
+  border: 2.5px solid #333; border-radius: 14px;
+  background: rgb(245,245,220);
+  font-family: 'Caveat', cursive; font-size: 22px;
+  color: #333; cursor: pointer; text-align: center;
+  box-shadow: 4px 4px 0 #333;
+  transition: transform 0.12s, box-shadow 0.12s;
+  display: flex; align-items: center; justify-content: center; gap: 10px;
+}
+.welcome-btn:hover { transform: translate(-2px,-2px); box-shadow: 6px 6px 0 #333; }
+.welcome-btn:active { transform: translate(2px,2px); box-shadow: 2px 2px 0 #333; }
+
+.welcome-btn.story { background: #333; color: rgb(245,245,220); }
+.welcome-btn.garden { background: rgb(245,245,220); color: #333; }
+
+/* ══════════════════════════════
+   INTRO SCREEN
+══════════════════════════════ */
+#intro-screen {
+  background: #e8e8d0;
+  display: flex; justify-content: center;
+  padding: 24px; min-height: 100vh;
+}
+
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: sans-serif; background: #e8e8d0; display: flex; justify-content: center; padding: 24px; min-height: 100vh; }
+
+#intro-scene {
+  width: 100%;
+  max-width: 600px;
+  background: rgb(245,245,220);
+  border-radius: 14px;
+  border: 1px solid #ccc8a0;
+  position: relative;
+  overflow: hidden;
+  cursor: pointer;
+  user-select: none;
+}
+
+.bubble-group { transition: opacity 0.2s; }
+.bubble-group.hidden { opacity: 0; pointer-events: none; }
+
+.click-hint {
+  position: absolute;
+  bottom: 10px; right: 14px;
+  font-size: 11px;
+  color: rgba(80,70,30,0.5);
+  animation: hintBlink 1.1s infinite alternate;
+  pointer-events: none;
+}
+
+@keyframes hintBlink { from { opacity:0.3; } to { opacity:0.9; } }
+
+@keyframes floatHeart {
+  0%   { opacity:1; transform:translateY(0) scale(1); }
+  100% { opacity:0; transform:translateY(-65px) scale(0.3); }
+}
+
+
+.skip-btn {
+  position: absolute;
+  top: 12px; right: 14px;
+  padding: 5px 14px;
+  border-radius: 999px;
+  border: 1px solid #c0b070;
+  background: rgba(180,160,60,0.12);
+  color: #7a6a30;
+  font-size: 12px;
+  cursor: pointer;
+  z-index: 50;
+  transition: background 0.2s;
+  font-family: sans-serif;
+}
+.skip-btn:hover { background: rgba(180,160,60,0.28); }
+.end-overlay {
+  position: absolute; inset: 0;
+  background: rgba(245,245,220,0.94);
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  gap: 14px; opacity: 0; pointer-events: none;
+  transition: opacity 0.7s; border-radius: 14px;
+}
+.end-overlay.visible { opacity:1; pointer-events:all; }
+.end-title { font-size: 24px; font-weight: 700; color: #3a3a1a; }
+.end-sub { font-size: 13px; color: #6a6a4a; }
+.enter-btn {
+  padding: 10px 30px; border-radius: 999px;
+  border: 1.5px solid #b0a060;
+  background: rgba(180,160,60,0.1);
+  color: #3a3a1a; font-size: 14px; cursor: pointer;
+  transition: background 0.2s, transform 0.15s;
+}
+.enter-btn:hover { background: rgba(180,160,60,0.25); transform: scale(1.04); }
+
+
+
+
+/* ══════════════════════════════
+   GARDEN SCREEN
+══════════════════════════════ */
+#garden-screen {
+  background: #1a1005;
+  display: flex; justify-content: center;
+  align-items: center; min-height: 100vh;
+}
+
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { background: #1a1005; display: flex; justify-content: center; align-items: center; min-height: 100vh; overflow: hidden; }
+
+#game-wrap {
+  width: 100%; max-width: 480px;
+  height: 100vh; max-height: 820px;
+  position: relative; overflow: hidden;
+  background: rgb(245,245,220);
+  font-family: 'Caveat', cursive;
+}
+
+#world {
+  position: absolute; top: 0; left: 0; right: 0;
+  transition: transform 0.75s cubic-bezier(0.4,0,0.2,1);
+}
+
+/* grass strip top */
+.grass-strip {
+  position: absolute; left: 0; right: 0;
+  height: 32px;
+  background: #7ab648;
+  border-bottom: 3px solid #4a8a2a;
+}
+
+/* road */
+.road {
+  position: absolute; left: 50%; transform: translateX(-50%);
+  width: 60px; top: 0; bottom: 0;
+  background: #d4c9a8;
+  border-left: 2.5px solid #b8a880;
+  border-right: 2.5px solid #b8a880;
+}
+.road-dash {
+  position: absolute; left: 50%; transform: translateX(-50%);
+  width: 4px; height: 22px; background: #e8ddb0; border-radius: 2px;
+}
+
+/* garden bed */
+.garden-bed {
+  position: absolute;
+  width: 148px;
+  cursor: pointer;
+  transition: transform 0.15s;
+}
+.garden-bed:hover { transform: scale(1.02); }
+
+/* characters fixed */
+#characters {
+  position: absolute; bottom: 55px;
+  left: 50%; transform: translateX(-50%);
+  display: flex; gap: 2px;
+  pointer-events: none; z-index: 30;
+}
+@keyframes walkBob { 0%,100%{transform:translateY(0);} 50%{transform:translateY(-4px);} }
+@keyframes legL { 0%,100%{transform:rotate(-20deg);} 50%{transform:rotate(20deg);} }
+@keyframes legR { 0%,100%{transform:rotate(20deg);} 50%{transform:rotate(-20deg);} }
+@keyframes armL { 0%,100%{transform:rotate(16deg);} 50%{transform:rotate(-16deg);} }
+@keyframes armR { 0%,100%{transform:rotate(-16deg);} 50%{transform:rotate(16deg);} }
+.char-svg { animation: walkBob 0.6s ease-in-out infinite; }
+
+/* nav */
+#nav-up, #nav-down {
+  position: absolute; right: 12px;
+  width: 42px; height: 42px; border-radius: 50%;
+  background: rgb(245,245,220); border: 2.5px solid #333;
+  cursor: pointer; font-size: 18px; font-family: 'Caveat', cursive;
+  display: flex; align-items: center; justify-content: center;
+  z-index: 100; box-shadow: 2px 2px 0 #333;
+  transition: transform 0.1s; user-select: none;
+}
+#nav-up  { bottom: calc(50% + 8px); }
+#nav-down { top:   calc(50% + 8px); }
+#nav-up:active, #nav-down:active { transform: scale(0.9); }
+
+/* HUD */
+#hud { position: absolute; top: 10px; left: 12px; z-index: 100; display: flex; gap: 7px; }
+.hud-badge { background: rgb(245,245,220); border: 2px solid #333; border-radius: 999px; padding: 3px 12px; font-size: 14px; color: #333; box-shadow: 2px 2px 0 #aaa; }
+
+#section-label {
+  position: absolute; top: 10px; left: 50%; transform: translateX(-50%);
+  background: rgb(245,245,220); border: 2px solid #333; border-radius: 8px;
+  padding: 3px 16px; font-size: 15px; color: #333;
+  z-index: 100; pointer-events: none; opacity: 0; transition: opacity 0.4s;
+  box-shadow: 2px 2px 0 #aaa; white-space: nowrap;
+}
+
+/* butterfly */
+@keyframes bfly { 0%,100%{transform:translate(0,0);} 33%{transform:translate(8px,-10px);} 66%{transform:translate(-5px,-7px);} }
+
+/* modals */
+#plant-modal, #info-modal {
+  position: absolute; inset: 0; background: rgba(0,0,0,0.3);
+  display: flex; align-items: center; justify-content: center;
+  z-index: 200; opacity: 0; pointer-events: none; transition: opacity 0.2s;
+}
+#plant-modal.visible, #info-modal.visible { opacity:1; pointer-events:all; }
+
+.modal-card {
+  background: rgb(245,245,220); border: 2.5px solid #333;
+  border-radius: 14px; padding: 18px; width: 290px;
+  box-shadow: 4px 4px 0 #333;
+}
+.modal-card h3 { font-size: 20px; color: #333; margin-bottom: 12px; text-align: center; }
+
+.flower-picker { display: flex; flex-wrap: wrap; gap: 6px; justify-content: center; margin-bottom: 12px; }
+.flower-opt {
+  width: 46px; height: 52px; border: 2px solid #bbb; border-radius: 8px;
+  cursor: pointer; display: flex; flex-direction: column; align-items: center;
+  justify-content: flex-end; padding: 2px; background: rgb(245,245,220);
+  transition: transform 0.15s, border-color 0.15s;
+}
+.flower-opt:hover { transform: scale(1.1); }
+.flower-opt.selected { border-color: #333; border-width: 2.5px; background: #ddddb8; }
+.flower-opt span { font-size: 9px; color: #555; margin-top: 1px; }
+
+.who-picker { display: flex; gap: 8px; justify-content: center; margin-bottom: 10px; }
+.who-btn { padding: 5px 16px; border: 2px solid #bbb; border-radius: 999px; background: rgb(245,245,220); font-family: 'Caveat', cursive; font-size: 14px; cursor: pointer; color: #555; }
+.who-btn.active { border-color: #333; color: #333; background: #ddddb8; font-weight: 600; }
+
+.msg-input { width: 100%; padding: 7px 10px; border: 2px solid #bbb; border-radius: 8px; font-family: 'Caveat', cursive; font-size: 13px; margin-bottom: 10px; background: rgb(245,245,220); color: #333; resize: none; }
+.modal-btns { display: flex; gap: 8px; }
+.btn-plant { flex: 1; padding: 8px; border: 2px solid #333; border-radius: 8px; background: #333; color: rgb(245,245,220); font-family: 'Caveat', cursive; font-size: 15px; cursor: pointer; box-shadow: 2px 2px 0 #000; }
+.btn-cancel { padding: 8px 14px; border: 2px solid #bbb; border-radius: 8px; background: transparent; font-family: 'Caveat', cursive; font-size: 14px; cursor: pointer; color: #555; }
+
+.info-card { background: rgb(245,245,220); border: 2.5px solid #333; border-radius: 14px; padding: 20px; width: 250px; text-align: center; box-shadow: 4px 4px 0 #333; }
+.info-who { font-size: 16px; color: #333; margin: 8px 0 3px; }
+.info-date { font-size: 13px; color: #888; margin-bottom: 10px; }
+.info-msg { font-size: 15px; color: #333; font-style: italic; background: #e0e0b0; border-radius: 8px; border: 1.5px solid #bbb; padding: 8px 12px; margin-bottom: 12px; min-height: 36px; }
+.close-btn { padding: 7px 22px; border: 2px solid #333; border-radius: 8px; background: transparent; font-family: 'Caveat', cursive; font-size: 14px; cursor: pointer; color: #333; }
+
+#toast { position: absolute; bottom: 65px; left: 50%; transform: translateX(-50%); background: #333; color: rgb(245,245,220); padding: 7px 18px; border-radius: 999px; font-family: 'Caveat', cursive; font-size: 14px; z-index: 300; opacity: 0; pointer-events: none; transition: opacity 0.3s; white-space: nowrap; }
+#toast.show { opacity: 1; }
+
+@keyframes bloomIn { 0%{transform:scale(0) rotate(-15deg);opacity:0;} 70%{transform:scale(1.2) rotate(4deg);opacity:1;} 100%{transform:scale(1) rotate(0);opacity:1;} }
+.bloom { animation: bloomIn 0.5s ease-out forwards; }
+
+
+</style>
+</head>
+<body>
+
+<!-- ══ WELCOME SCREEN ══ -->
+<div id="welcome-screen" class="screen active">
+  <div class="welcome-title">Our Virtual Garden</div>
+  <div class="welcome-sub">a garden that grows with love 🌸</div>
+
+  <!-- little stickman illustration -->
+  <div class="welcome-art">
+    <svg width="220" height="140" viewBox="0 0 220 140">
+      <!-- ground line -->
+      <line x1="10" y1="118" x2="210" y2="118" stroke="#222" stroke-width="2.2" stroke-linecap="round"/>
+      <!-- flowers on ground -->
+      <g>
+        <line x1="40" y1="118" x2="40" y2="98" stroke="#222" stroke-width="1.8" stroke-linecap="round"/>
+        <path d="M40 98 Q35 90 36 84 Q40 80 40 76 Q40 80 44 84 Q45 90 40 98Z" fill="none" stroke="#222" stroke-width="1.6" stroke-linejoin="round"/>
+        <path d="M36 90 Q32 88 31 84" fill="none" stroke="#222" stroke-width="1.3" stroke-linecap="round"/>
+      </g>
+      <g>
+        <line x1="70" y1="118" x2="70" y2="96" stroke="#222" stroke-width="1.8" stroke-linecap="round"/>
+        <!-- daisy -->
+        <circle cx="70" cy="90" r="5" fill="none" stroke="#222" stroke-width="1.7"/>
+        <line x1="70" y1="85" x2="70" y2="80" stroke="#222" stroke-width="1.4" stroke-linecap="round"/>
+        <line x1="75" y1="87" x2="79" y2="83" stroke="#222" stroke-width="1.4" stroke-linecap="round"/>
+        <line x1="75" y1="93" x2="79" y2="97" stroke="#222" stroke-width="1.4" stroke-linecap="round"/>
+        <line x1="65" y1="87" x2="61" y2="83" stroke="#222" stroke-width="1.4" stroke-linecap="round"/>
+        <line x1="65" y1="93" x2="61" y2="97" stroke="#222" stroke-width="1.4" stroke-linecap="round"/>
+      </g>
+      <g>
+        <line x1="100" y1="118" x2="100" y2="96" stroke="#222" stroke-width="1.8" stroke-linecap="round"/>
+        <!-- sunflower small -->
+        <circle cx="100" cy="90" r="5.5" fill="none" stroke="#222" stroke-width="1.7"/>
+        <circle cx="100" cy="90" r="2.5" fill="none" stroke="#222" stroke-width="1.4"/>
+        <line x1="100" y1="84" x2="100" y2="79" stroke="#222" stroke-width="1.3" stroke-linecap="round"/>
+        <line x1="105" y1="85" x2="109" y2="81" stroke="#222" stroke-width="1.3" stroke-linecap="round"/>
+        <line x1="106" y1="90" x2="111" y2="90" stroke="#222" stroke-width="1.3" stroke-linecap="round"/>
+        <line x1="95" y1="85" x2="91" y2="81" stroke="#222" stroke-width="1.3" stroke-linecap="round"/>
+        <line x1="94" y1="90" x2="89" y2="90" stroke="#222" stroke-width="1.3" stroke-linecap="round"/>
+      </g>
+      <!-- Talha (back) -->
+      <g>
+        <circle cx="155" cy="68" r="10" fill="rgb(245,245,220)" stroke="#222" stroke-width="2"/>
+        <path d="M146 67 Q147 60 155 60 Q163 60 164 67" stroke="#222" stroke-width="2.2" fill="none" stroke-linecap="round"/>
+        <line x1="146" y1="65" x2="164" y2="65" stroke="#222" stroke-width="2.2" stroke-linecap="round"/>
+        <line x1="155" y1="78" x2="155" y2="100" stroke="#222" stroke-width="2.2" stroke-linecap="round"/>
+        <line x1="155" y1="86" x2="145" y2="98" stroke="#222" stroke-width="2" stroke-linecap="round"/>
+        <line x1="155" y1="86" x2="165" y2="98" stroke="#222" stroke-width="2" stroke-linecap="round"/>
+        <line x1="155" y1="100" x2="148" y2="118" stroke="#222" stroke-width="2" stroke-linecap="round"/>
+        <line x1="155" y1="100" x2="162" y2="118" stroke="#222" stroke-width="2" stroke-linecap="round"/>
+      </g>
+      <!-- Aysha (back) -->
+      <g>
+        <circle cx="182" cy="68" r="10" fill="rgb(245,245,220)" stroke="#222" stroke-width="2"/>
+        <path d="M173 66 Q172 76 174 92" stroke="#222" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+        <path d="M191 66 Q192 76 190 92" stroke="#222" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+        <path d="M173 66 Q174 60 182 60 Q190 60 191 66" stroke="#222" stroke-width="2.2" fill="none" stroke-linecap="round"/>
+        <circle cx="182" cy="61" r="4" fill="rgb(245,245,220)" stroke="#222" stroke-width="2"/>
+        <path d="M182 78 L176 100 L188 100 Z" fill="none" stroke="#222" stroke-width="2" stroke-linejoin="round"/>
+        <line x1="182" y1="86" x2="172" y2="98" stroke="#222" stroke-width="2" stroke-linecap="round"/>
+        <line x1="182" y1="86" x2="192" y2="98" stroke="#222" stroke-width="2" stroke-linecap="round"/>
+        <line x1="176" y1="100" x2="170" y2="118" stroke="#222" stroke-width="2" stroke-linecap="round"/>
+        <line x1="188" y1="100" x2="194" y2="118" stroke="#222" stroke-width="2" stroke-linecap="round"/>
+      </g>
+      <!-- hearts -->
+      <text x="167" y="58" font-size="11" fill="#e85a8a" font-family="sans-serif">💕</text>
+    </svg>
+  </div>
+
+  <div class="welcome-btns">
+    <button class="welcome-btn story" onclick="goStory()">📖 Story</button>
+    <button class="welcome-btn garden" onclick="goGarden()">🌸 Garden</button>
+  </div>
+</div>
+
+<!-- ══ INTRO SCREEN ══ -->
+<div id="intro-screen" class="screen">
+  
+<div id="intro-scene" onclick="advance()">
+
+  <button class="skip-btn" onclick="skipToGarden(event)">Skip ›</button>
+
+  <svg width="100%" viewBox="0 0 520 370" style="display:block;">
+    <defs>
+      <filter id="rough">
+        <feTurbulence type="fractalNoise" baseFrequency="0.035" numOctaves="3" seed="5" result="noise"/>
+        <feDisplacementMap in="SourceGraphic" in2="noise" scale="0.8" xChannelSelector="R" yChannelSelector="G"/>
+      </filter>
+    </defs>
+
+    <!-- ground -->
+    <line x1="40" y1="300" x2="480" y2="300" stroke="#222" stroke-width="2.5" stroke-linecap="round" filter="url(#rough)"/>
+
+    <!-- TALHA stickman -->
+    <g id="him-char" style="transition:opacity 0.4s;" filter="url(#rough)">
+      <circle cx="128" cy="224" r="22" fill="none" stroke="#222" stroke-width="2.5"/>
+      <line x1="128" y1="246" x2="128" y2="278" stroke="#222" stroke-width="2.5" stroke-linecap="round"/>
+      <line x1="128" y1="255" x2="96"  y2="268" stroke="#222" stroke-width="2.5" stroke-linecap="round"/>
+      <line x1="128" y1="255" x2="160" y2="265" stroke="#222" stroke-width="2.5" stroke-linecap="round"/>
+      <line x1="128" y1="278" x2="108" y2="300" stroke="#222" stroke-width="2.5" stroke-linecap="round"/>
+      <line x1="128" y1="278" x2="148" y2="300" stroke="#222" stroke-width="2.5" stroke-linecap="round"/>
+      <line x1="110" y1="212" x2="106" y2="203" stroke="#222" stroke-width="2" stroke-linecap="round"/>
+      <line x1="119" y1="204" x2="117" y2="195" stroke="#222" stroke-width="2" stroke-linecap="round"/>
+      <line x1="128" y1="202" x2="128" y2="193" stroke="#222" stroke-width="2" stroke-linecap="round"/>
+      <circle cx="120" cy="222" r="2.2" fill="#222"/>
+      <circle cx="136" cy="222" r="2.2" fill="#222"/>
+      <path d="M120 231 Q128 236 136 231" stroke="#222" stroke-width="1.8" fill="none" stroke-linecap="round"/>
+    </g>
+
+    <!-- AYSHA stickman -->
+    <g id="her-char" style="transition:opacity 0.4s;" filter="url(#rough)">
+      <circle cx="392" cy="224" r="22" fill="none" stroke="#222" stroke-width="2.5"/>
+      <path d="M370 213 Q372 190 392 187 Q412 190 414 213" stroke="#222" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+      <ellipse cx="392" cy="189" rx="14" ry="10" fill="none" stroke="#222" stroke-width="2.5"/>
+      <line x1="385" y1="183" x2="383" y2="176" stroke="#222" stroke-width="2" stroke-linecap="round"/>
+      <line x1="392" y1="180" x2="392" y2="173" stroke="#222" stroke-width="2" stroke-linecap="round"/>
+      <line x1="399" y1="183" x2="401" y2="176" stroke="#222" stroke-width="2" stroke-linecap="round"/>
+      <line x1="392" y1="246" x2="392" y2="276" stroke="#222" stroke-width="2.5" stroke-linecap="round"/>
+      <path d="M370 300 Q381 270 392 276 Q403 270 414 300" stroke="#222" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+      <line x1="392" y1="255" x2="362" y2="268" stroke="#222" stroke-width="2.5" stroke-linecap="round"/>
+      <line x1="392" y1="255" x2="422" y2="270" stroke="#222" stroke-width="2.5" stroke-linecap="round"/>
+      <circle cx="384" cy="222" r="2.2" fill="#222"/>
+      <circle cx="400" cy="222" r="2.2" fill="#222"/>
+      <path d="M384 231 Q392 236 400 231" stroke="#222" stroke-width="1.8" fill="none" stroke-linecap="round"/>
+    </g>
+
+    <text x="128" y="322" text-anchor="middle" font-size="12" fill="#777" font-family="sans-serif">Talha</text>
+    <text x="392" y="322" text-anchor="middle" font-size="12" fill="#777" font-family="sans-serif">Aysha</text>
+
+    <!-- TALHA thought bubble -->
+    <g id="him-bubble" class="bubble-group hidden">
+      <circle cx="154" cy="200" r="3" fill="none" stroke="#444" stroke-width="1.8"/>
+      <circle cx="166" cy="189" r="4.5" fill="none" stroke="#444" stroke-width="1.8"/>
+      <circle cx="180" cy="177" r="6" fill="none" stroke="#444" stroke-width="2"/>
+      <path d="M193 163 Q193 123 233 121 Q243 97 273 100 Q303 91 319 113 Q345 109 347 133 Q367 135 365 157 Q367 177 345 179 Q331 191 311 187 Q295 199 270 194 Q249 205 225 197 Q201 203 191 183 Q177 179 193 163 Z"
+        fill="rgb(245,245,220)" stroke="#444" stroke-width="2" stroke-linejoin="round"/>
+      <text id="him-text" x="278" y="155" text-anchor="middle" font-size="12" fill="#222" font-family="sans-serif"></text>
+    </g>
+
+    <!-- HUG inside bubble — uses clipPath of the cloud shape -->
+    <defs>
+      <clipPath id="bubble-clip">
+        <path d="M193 163 Q193 123 233 121 Q243 97 273 100 Q303 91 319 113 Q345 109 347 133 Q367 135 365 157 Q367 177 345 179 Q331 191 311 187 Q295 199 270 194 Q249 205 225 197 Q201 203 191 183 Q177 179 193 163 Z"/>
+      </clipPath>
+    </defs>
+
+    <g id="hug-bubble" class="bubble-group hidden">
+      <!-- thought dots -->
+      <circle cx="154" cy="200" r="3" fill="none" stroke="#444" stroke-width="1.8"/>
+      <circle cx="166" cy="189" r="4.5" fill="none" stroke="#444" stroke-width="1.8"/>
+      <circle cx="180" cy="177" r="6" fill="none" stroke="#444" stroke-width="2"/>
+      <!-- imagination label -->
+      <text x="280" y="90" text-anchor="middle" font-size="11" fill="#b09060" font-family="sans-serif" font-style="italic" font-weight="500" opacity="0.9">Talha's Imagination</text>
+      <!-- cloud outline -->
+      <path d="M193 163 Q193 123 233 121 Q243 97 273 100 Q303 91 319 113 Q345 109 347 133 Q367 135 365 157 Q367 177 345 179 Q331 191 311 187 Q295 199 270 194 Q249 205 225 197 Q201 203 191 183 Q177 179 193 163 Z"
+        fill="rgb(245,245,220)" stroke="#444" stroke-width="2" stroke-linejoin="round"/>
+
+      <!-- clipped animation frames, centered in bubble area (cx≈280, cy≈148, w≈160, h≈80) -->
+      <g clip-path="url(#bubble-clip)">
+
+        <!-- FRAME 1: Aysha running toward Talha -->
+        <g id="bf1">
+          <!-- Talha small, arms open, left side -->
+          <circle cx="222" cy="148" r="13" fill="none" stroke="#222" stroke-width="2"/>
+          <line x1="222" y1="161" x2="222" y2="182" stroke="#222" stroke-width="2" stroke-linecap="round"/>
+          <line x1="222" y1="169" x2="207" y2="163" stroke="#222" stroke-width="2" stroke-linecap="round"/>
+          <line x1="222" y1="169" x2="237" y2="163" stroke="#222" stroke-width="2" stroke-linecap="round"/>
+          <line x1="222" y1="182" x2="213" y2="196" stroke="#222" stroke-width="2" stroke-linecap="round"/>
+          <line x1="222" y1="182" x2="231" y2="196" stroke="#222" stroke-width="2" stroke-linecap="round"/>
+          <line x1="212" y1="140" x2="210" y2="134" stroke="#222" stroke-width="1.5" stroke-linecap="round"/>
+          <line x1="218" y1="136" x2="217" y2="130" stroke="#222" stroke-width="1.5" stroke-linecap="round"/>
+          <circle cx="218" cy="146" r="1.6" fill="#222"/>
+          <circle cx="226" cy="146" r="1.6" fill="#222"/>
+          <path d="M218 152 Q222 155 226 152" stroke="#222" stroke-width="1.4" fill="none" stroke-linecap="round"/>
+          <!-- Aysha running from right -->
+          <circle cx="320" cy="148" r="13" fill="none" stroke="#222" stroke-width="2"/>
+          <path d="M309 141 Q310 129 320 127 Q330 129 331 141" stroke="#222" stroke-width="2" fill="none" stroke-linecap="round"/>
+          <ellipse cx="320" cy="128" rx="9" ry="6" fill="none" stroke="#222" stroke-width="2"/>
+          <line x1="320" y1="161" x2="318" y2="182" stroke="#222" stroke-width="2" stroke-linecap="round"/>
+          <line x1="319" y1="170" x2="306" y2="165" stroke="#222" stroke-width="2" stroke-linecap="round"/>
+          <line x1="319" y1="170" x2="330" y2="172" stroke="#222" stroke-width="2" stroke-linecap="round"/>
+          <line x1="318" y1="182" x2="306" y2="196" stroke="#222" stroke-width="2" stroke-linecap="round"/>
+          <line x1="318" y1="182" x2="326" y2="195" stroke="#222" stroke-width="2" stroke-linecap="round"/>
+          <circle cx="315" cy="146" r="1.6" fill="#222"/>
+          <circle cx="325" cy="146" r="1.6" fill="#222"/>
+          <path d="M315 154 Q320 157 325 154" stroke="#222" stroke-width="1.4" fill="none" stroke-linecap="round"/>
+          <!-- motion lines -->
+          <line x1="336" y1="155" x2="344" y2="155" stroke="#bbb" stroke-width="1.5" stroke-linecap="round"/>
+          <line x1="337" y1="150" x2="344" y2="149" stroke="#bbb" stroke-width="1.2" stroke-linecap="round"/>
+          <line x1="337" y1="160" x2="344" y2="161" stroke="#bbb" stroke-width="1.2" stroke-linecap="round"/>
+          <text x="280" y="205" text-anchor="middle" font-size="9" fill="#999" font-family="sans-serif">She's running!! 💨</text>
+        </g>
+
+        <!-- FRAME 2: Aysha jumping mid-air -->
+        <g id="bf2" style="display:none">
+          <circle cx="222" cy="152" r="13" fill="none" stroke="#222" stroke-width="2"/>
+          <line x1="222" y1="165" x2="222" y2="186" stroke="#222" stroke-width="2" stroke-linecap="round"/>
+          <line x1="222" y1="173" x2="207" y2="166" stroke="#222" stroke-width="2" stroke-linecap="round"/>
+          <line x1="222" y1="173" x2="237" y2="166" stroke="#222" stroke-width="2" stroke-linecap="round"/>
+          <line x1="222" y1="186" x2="213" y2="198" stroke="#222" stroke-width="2" stroke-linecap="round"/>
+          <line x1="222" y1="186" x2="231" y2="198" stroke="#222" stroke-width="2" stroke-linecap="round"/>
+          <line x1="212" y1="144" x2="210" y2="138" stroke="#222" stroke-width="1.5" stroke-linecap="round"/>
+          <line x1="218" y1="140" x2="217" y2="134" stroke="#222" stroke-width="1.5" stroke-linecap="round"/>
+          <!-- wide eyes -->
+          <circle cx="218" cy="150" r="2.2" fill="#222"/>
+          <circle cx="226" cy="150" r="2.2" fill="#222"/>
+          <path d="M218 157 Q222 160 226 157" stroke="#222" stroke-width="1.4" fill="none" stroke-linecap="round"/>
+          <!-- Aysha mid-jump, tilted body -->
+          <circle cx="300" cy="118" r="13" fill="none" stroke="#222" stroke-width="2"/>
+          <path d="M289 111 Q290 99 300 97 Q310 99 311 111" stroke="#222" stroke-width="2" fill="none" stroke-linecap="round"/>
+          <ellipse cx="300" cy="98" rx="9" ry="6" fill="none" stroke="#222" stroke-width="2"/>
+          <line x1="300" y1="131" x2="291" y2="154" stroke="#222" stroke-width="2" stroke-linecap="round"/>
+          <line x1="296" y1="140" x2="280" y2="133" stroke="#222" stroke-width="2" stroke-linecap="round"/>
+          <line x1="296" y1="140" x2="310" y2="132" stroke="#222" stroke-width="2" stroke-linecap="round"/>
+          <line x1="291" y1="154" x2="279" y2="166" stroke="#222" stroke-width="2" stroke-linecap="round"/>
+          <line x1="291" y1="154" x2="300" y2="167" stroke="#222" stroke-width="2" stroke-linecap="round"/>
+          <circle cx="295" cy="116" r="1.6" fill="#222"/>
+          <circle cx="305" cy="116" r="1.6" fill="#222"/>
+          <!-- jump arc -->
+          <path d="M240 175 Q268 130 295 120" stroke="#ffb3d9" stroke-width="1.5" fill="none" stroke-dasharray="4,3" stroke-linecap="round"/>
+          <text x="280" y="205" text-anchor="middle" font-size="9" fill="#999" font-family="sans-serif">She's jumping!! 😱</text>
+        </g>
+
+        <!-- FRAME 3: Aysha on Talha, baci -->
+        <g id="bf3" style="display:none">
+          <!-- Talha dizzy -->
+          <circle cx="248" cy="152" r="13" fill="none" stroke="#222" stroke-width="2"/>
+          <line x1="248" y1="165" x2="247" y2="188" stroke="#222" stroke-width="2" stroke-linecap="round"/>
+          <line x1="247" y1="174" x2="232" y2="179" stroke="#222" stroke-width="2" stroke-linecap="round"/>
+          <line x1="247" y1="174" x2="262" y2="177" stroke="#222" stroke-width="2" stroke-linecap="round"/>
+          <line x1="247" y1="188" x2="238" y2="200" stroke="#222" stroke-width="2" stroke-linecap="round"/>
+          <line x1="247" y1="188" x2="256" y2="200" stroke="#222" stroke-width="2" stroke-linecap="round"/>
+          <!-- X eyes -->
+          <line x1="242" y1="147" x2="246" y2="151" stroke="#222" stroke-width="1.8" stroke-linecap="round"/>
+          <line x1="246" y1="147" x2="242" y2="151" stroke="#222" stroke-width="1.8" stroke-linecap="round"/>
+          <line x1="250" y1="147" x2="254" y2="151" stroke="#222" stroke-width="1.8" stroke-linecap="round"/>
+          <line x1="254" y1="147" x2="250" y2="151" stroke="#222" stroke-width="1.8" stroke-linecap="round"/>
+          <path d="M242 158 Q248 155 254 158" stroke="#222" stroke-width="1.4" fill="none" stroke-linecap="round"/>
+          <ellipse cx="239" cy="158" rx="5" ry="2.5" fill="#ffb3b3" opacity="0.7"/>
+          <!-- Aysha clinging, head next to Talha -->
+          <circle cx="282" cy="130" r="13" fill="none" stroke="#222" stroke-width="2"/>
+          <path d="M271 123 Q272 111 282 109 Q292 111 293 123" stroke="#222" stroke-width="2" fill="none" stroke-linecap="round"/>
+          <ellipse cx="282" cy="110" rx="9" ry="6" fill="none" stroke="#222" stroke-width="2"/>
+          <line x1="282" y1="143" x2="276" y2="164" stroke="#222" stroke-width="2" stroke-linecap="round"/>
+          <!-- arms wrapping around Talha -->
+          <path d="M278 150 Q263 156 248 165" stroke="#222" stroke-width="2" fill="none" stroke-linecap="round"/>
+          <path d="M278 146 Q264 140 252 144" stroke="#222" stroke-width="2" fill="none" stroke-linecap="round"/>
+          <line x1="276" y1="164" x2="268" y2="176" stroke="#222" stroke-width="2" stroke-linecap="round"/>
+          <line x1="276" y1="164" x2="284" y2="176" stroke="#222" stroke-width="2" stroke-linecap="round"/>
+          <!-- Aysha happy eyes -->
+          <path d="M276" cy="128 Q279 124 282 128" stroke="#222" stroke-width="1.8" fill="none" stroke-linecap="round"/>
+          <path d="M276 128 Q279 124 282 128" stroke="#222" stroke-width="1.8" fill="none" stroke-linecap="round"/>
+          <path d="M283 128 Q286 124 289 128" stroke="#222" stroke-width="1.8" fill="none" stroke-linecap="round"/>
+          <ellipse cx="291" cy="137" rx="5" ry="2.5" fill="#ffb3b3" opacity="0.7"/>
+          <!-- kiss marks -->
+          <text x="236" y="138" font-size="12" font-family="sans-serif">💋</text>
+          <text x="294" y="118" font-size="10" font-family="sans-serif">💋</text>
+          <text x="222" y="124" font-size="10" font-family="sans-serif">😘</text>
+          <text x="305" y="138" font-size="9"  font-family="sans-serif">💕</text>
+          <text x="280" y="205" text-anchor="middle" font-size="9" fill="#999" font-family="sans-serif">Baci baci baci!! 😵💕</text>
+        </g>
+
+        <!-- FRAME 4: Both happy -->
+        <g id="bf4" style="display:none">
+          <circle cx="238" cy="152" r="13" fill="none" stroke="#222" stroke-width="2"/>
+          <line x1="238" y1="165" x2="238" y2="188" stroke="#222" stroke-width="2" stroke-linecap="round"/>
+          <line x1="238" y1="174" x2="223" y2="180" stroke="#222" stroke-width="2" stroke-linecap="round"/>
+          <line x1="238" y1="174" x2="253" y2="178" stroke="#222" stroke-width="2" stroke-linecap="round"/>
+          <line x1="238" y1="188" x2="229" y2="200" stroke="#222" stroke-width="2" stroke-linecap="round"/>
+          <line x1="238" y1="188" x2="247" y2="200" stroke="#222" stroke-width="2" stroke-linecap="round"/>
+          <line x1="228" y1="144" x2="226" y2="138" stroke="#222" stroke-width="1.5" stroke-linecap="round"/>
+          <line x1="234" y1="140" x2="233" y2="134" stroke="#222" stroke-width="1.5" stroke-linecap="round"/>
+          <path d="M231 150 Q234 146 237 150" stroke="#222" stroke-width="1.8" fill="none" stroke-linecap="round"/>
+          <path d="M239 150 Q242 146 245 150" stroke="#222" stroke-width="1.8" fill="none" stroke-linecap="round"/>
+          <path d="M230 159 Q238 164 246 159" stroke="#222" stroke-width="1.8" fill="none" stroke-linecap="round"/>
+          <ellipse cx="228" cy="160" rx="5" ry="2.5" fill="#ffb3b3" opacity="0.6"/>
+          <!-- holding hands -->
+          <line x1="253" y1="178" x2="268" y2="176" stroke="#222" stroke-width="2" stroke-linecap="round"/>
+          <!-- Aysha -->
+          <circle cx="308" cy="152" r="13" fill="none" stroke="#222" stroke-width="2"/>
+          <path d="M297 145 Q298 133 308 131 Q318 133 319 145" stroke="#222" stroke-width="2" fill="none" stroke-linecap="round"/>
+          <ellipse cx="308" cy="132" rx="9" ry="6" fill="none" stroke="#222" stroke-width="2"/>
+          <line x1="308" y1="165" x2="308" y2="188" stroke="#222" stroke-width="2" stroke-linecap="round"/>
+          <path d="M293 200 Q300 180 308 188 Q316 180 323 200" stroke="#222" stroke-width="2" fill="none" stroke-linecap="round"/>
+          <line x1="268" y1="176" x2="293" y2="176" stroke="#222" stroke-width="2" stroke-linecap="round"/>
+          <line x1="308" y1="174" x2="293" y2="176" stroke="#222" stroke-width="2" stroke-linecap="round"/>
+          <path d="M301 150 Q304 146 307 150" stroke="#222" stroke-width="1.8" fill="none" stroke-linecap="round"/>
+          <path d="M309 150 Q312 146 315 150" stroke="#222" stroke-width="1.8" fill="none" stroke-linecap="round"/>
+          <path d="M301 159 Q308 164 315 159" stroke="#222" stroke-width="1.8" fill="none" stroke-linecap="round"/>
+          <ellipse cx="318" cy="160" rx="5" ry="2.5" fill="#ffb3b3" opacity="0.6"/>
+          <!-- hearts -->
+          <text x="262" y="120" font-size="13" font-family="sans-serif">💕</text>
+          <text x="244" y="132" font-size="10" font-family="sans-serif">💗</text>
+          <text x="278" y="126" font-size="10" font-family="sans-serif">💖</text>
+          <text x="280" y="205" text-anchor="middle" font-size="9" fill="#999" font-family="sans-serif">So happy together 🌸</text>
+        </g>
+
+      </g><!-- end clip -->
+    </g><!-- end hug-bubble -->
+
+    <!-- AYSHA thought bubble -->
+    <g id="her-bubble" class="bubble-group hidden">
+      <circle cx="366" cy="200" r="3" fill="none" stroke="#444" stroke-width="1.8"/>
+      <circle cx="354" cy="189" r="4.5" fill="none" stroke="#444" stroke-width="1.8"/>
+      <circle cx="340" cy="177" r="6" fill="none" stroke="#444" stroke-width="2"/>
+      <path d="M327 163 Q327 123 287 121 Q277 97 247 100 Q217 91 201 113 Q175 109 173 133 Q153 135 155 157 Q153 177 175 179 Q189 191 209 187 Q225 199 250 194 Q271 205 295 197 Q319 203 329 183 Q343 179 327 163 Z"
+        fill="rgb(245,245,220)" stroke="#444" stroke-width="2" stroke-linejoin="round"/>
+      <text id="her-text" x="242" y="155" text-anchor="middle" font-size="12" fill="#222" font-family="sans-serif"></text>
+    </g>
+
+    <!-- Reality label - shown only on the step after hug (Aysha "Tnx 💕") -->
+    <text id="reality-label" x="242" y="90" text-anchor="middle"
+      font-size="11" fill="#b06060" font-family="sans-serif"
+      font-style="italic" font-weight="500" opacity="0"
+      style="transition: opacity 0.3s;">Reality</text>
+
+  </svg>
+
+  <div class="click-hint" id="click-hint">click to continue ▼</div>
+
+  <div class="end-overlay" id="end-overlay">
+    <div class="end-title">Our Garden 🌸</div>
+    <div class="end-sub">A place that blooms with every thought of you.</div>
+    <button class="enter-btn" onclick="enterGarden(event)">Enter the garden ✦</button>
+  </div>
+</div>
+
+<script>
+const SCRIPT = [
+  { speaker: 'him', name: 'Talha', text: "Heello my love!\nI heard you like flowers a lot?" },
+  { speaker: 'her', name: 'Aysha', text: "Yes, you heard right babe! 🥰" },
+  { speaker: 'him', name: 'Talha', text: "More than me? 🤨" },
+  { speaker: 'her', name: 'Aysha', text: "Yap 😶\nWhy is it any problem?" },
+  { speaker: 'him', name: 'Talha', text: "Nah never mind..!! 😒" },
+  { speaker: 'him', name: 'Talha', text: "But I miss you more than I remember you! 😫" },
+  { speaker: 'her', name: 'Aysha', text: "Really 👀\nLike how much?" },
+  { speaker: 'him', name: 'Talha', text: "Enough to build you something special. 😚" },
+  { speaker: 'her', name: 'Aysha', text: "Hmm! Interesting!" },
+  { speaker: 'him', name: 'Talha', text: "I created a virtual garden only for you darling! 😚" },
+  { speaker: 'her', name: 'Aysha', text: "Wow! That's... the sweetest thing anyone's ever done to me 🥺" },
+  { speaker: 'him', name: 'Talha', text: '', anim: 'hug' },
+  { speaker: 'her', name: 'Aysha', text: "Tnx 💕" },
+  { speaker: 'him', name: 'Talha', text: "Only tnx!! 😒 Never mind..😖" },
+  { speaker: 'him', name: 'Talha', text: "Come on, let's go to visit our virtual garden babe." },
+  { speaker: 'her', name: 'Aysha', text: "Yeeeeee!! Let's goooooo 🎉" },
+];
+
+let step = 0, typing = false, typeTimer = null, currentFull = '', currentPos = 0;
+let hugFrameTimer = null, currentHugFrame = 1;
+let heartInterval = null;
+
+
+function updateUI() {}
+
+function wrapText(text, maxChars) {
+  const words = text.split(' ');
+  const lines = [], cur = [''];
+  let c = '';
+  for (const w of words) {
+    const cand = c ? c + ' ' + w : w;
+    if (cand.length > maxChars) { lines.push(c); c = w; }
+    else c = cand;
+  }
+  if (c) lines.push(c);
+  return lines;
+}
+
+function renderBubbleText(elId, text) {
+  const el = document.getElementById(elId);
+  if (!el) return;
+  el.innerHTML = '';
+  // Split on explicit \n first, then wrap each segment
+  const segments = text.split('\n');
+  const lines = [];
+  segments.forEach(seg => wrapText(seg, 20).forEach(l => lines.push(l)));
+  const cx = elId === 'him-text' ? '278' : '242';
+  const totalH = (lines.length - 1) * 15;
+  const baseY = 150 - totalH / 2;
+  lines.forEach((line, i) => {
+    const ts = document.createElementNS('http://www.w3.org/2000/svg', 'tspan');
+    ts.setAttribute('x', cx);
+    if (i === 0) ts.setAttribute('y', String(baseY));
+    else ts.setAttribute('dy', '15');
+    ts.textContent = line;
+    el.appendChild(ts);
+  });
+}
+
+function typeInBubble(textId, text) {
+  typing = true; currentFull = text; currentPos = 0;
+  document.getElementById('click-hint').style.opacity = '0';
+  const el = document.getElementById(textId);
+  if (el) el.innerHTML = '';
+  function tick() {
+    currentPos++;
+    renderBubbleText(textId, currentFull.slice(0, currentPos));
+    if (currentPos < currentFull.length) typeTimer = setTimeout(tick, 34);
+    else { typing = false; document.getElementById('click-hint').style.opacity = '1'; }
+  }
+  tick();
+}
+
+function showHugFrame(n) {
+  for (let i = 1; i <= 4; i++) {
+    const f = document.getElementById('bf' + i);
+    if (f) f.style.display = i === n ? 'block' : 'none';
+  }
+}
+
+function startHugAnimation() {
+  currentHugFrame = 1;
+  showHugFrame(1);
+  hugFrameTimer = setInterval(() => {
+    currentHugFrame = currentHugFrame >= 4 ? 1 : currentHugFrame + 1;
+    showHugFrame(currentHugFrame);
+  }, 700);
+}
+
+function stopHugAnimation() {
+  clearInterval(hugFrameTimer);
+  for (let i = 1; i <= 4; i++) {
+    const f = document.getElementById('bf' + i);
+    if (f) f.style.display = 'none';
+  }
+  
+}
+
+function spawnHearts() {
+  clearInterval(heartInterval);
+  heartInterval = setInterval(() => {
+    const scene = document.getElementById('intro-scene');
+    const h = document.createElement('div');
+    const emojis = ['💕','💗','💖','😘','🌸','💝'];
+    h.style.cssText = 'position:absolute;font-size:'+(14+Math.random()*10)+'px;'
+      +'left:'+(20+Math.random()*60)+'%;bottom:'+(30+Math.random()*40)+'%;'
+      +'animation:floatHeart 1.2s ease-out forwards;pointer-events:none;z-index:20;';
+    h.textContent = emojis[Math.floor(Math.random()*emojis.length)];
+    scene.appendChild(h);
+    setTimeout(() => h.remove(), 1300);
+  }, 240);
+}
+
+function stopHearts() { clearInterval(heartInterval); }
+
+function showStep(idx) {
+  if (idx >= SCRIPT.length) { showEnd(); return; }
+  const line = SCRIPT[idx];
+
+  document.getElementById('him-bubble').classList.add('hidden');
+  document.getElementById('her-bubble').classList.add('hidden');
+  document.getElementById('hug-bubble').classList.add('hidden');
+  stopHearts();
+  stopHugAnimation();
+  updateUI();
+
+  // Show "Reality" label only on the Tnx step (first after hug)
+  const realityLabel = document.getElementById('reality-label');
+  if (realityLabel) {
+    realityLabel.style.opacity = (line.text === 'Tnx 💕') ? '1' : '0';
+  }
+
+  if (line.anim === 'hug') {
+    document.getElementById('him-char').style.opacity = '1';
+    document.getElementById('her-char').style.opacity = '0.28';
+    document.getElementById('hug-bubble').classList.remove('hidden');
+    document.getElementById('click-hint').style.opacity = '1';
+    typing = false;
+    startHugAnimation();
+    spawnHearts();
+    return;
+  }
+
+  document.getElementById('him-char').style.opacity = line.speaker === 'him' ? '1' : '0.28';
+  document.getElementById('her-char').style.opacity = line.speaker === 'her' ? '1' : '0.28';
+  const bubbleId = line.speaker === 'him' ? 'him-bubble' : 'her-bubble';
+  const textId   = line.speaker === 'him' ? 'him-text'   : 'her-text';
+  document.getElementById(bubbleId).classList.remove('hidden');
+  typeInBubble(textId, line.text);
+}
+
+function advance() {
+  if (typing) {
+    clearTimeout(typeTimer); typing = false;
+    const line = SCRIPT[step];
+    if (!line.anim) renderBubbleText(line.speaker === 'him' ? 'him-text' : 'her-text', currentFull);
+    document.getElementById('click-hint').style.opacity = '1';
+    return;
+  }
+  stopHearts(); stopHugAnimation();
+  step++;
+  if (step >= SCRIPT.length) showEnd();
+  else showStep(step);
+}
+
+function showEnd() {
+  stopHearts(); stopHugAnimation();
+  document.getElementById('end-overlay').classList.add('visible');
+  document.getElementById('click-hint').style.display = 'none';
+}
+
+function skipToGarden(e) {
+  e.stopPropagation();
+  stopHearts(); stopHugAnimation();
+  showEnd();
+}
+
+function enterGarden(e) {
+  e.stopPropagation();
+  alert('🌸 Benvenuto nel giardino!');
+}
+
+showStep(0);
+</script>
+
+</div>
+
+<!-- ══ GARDEN SCREEN ══ -->
+<div id="garden-screen" class="screen">
+  
+<div id="game-wrap">
+  <div id="world"></div>
+
+  <!-- Characters fixed bottom center -->
+  <div id="characters">
+    <!-- Talha (back, male) -->
+    <svg class="char-svg" width="26" height="66" viewBox="0 0 26 66">
+      <circle cx="13" cy="10" r="8.5" fill="rgb(245,245,220)" stroke="#222" stroke-width="2"/>
+      <path d="M5 9 Q6 2 13 2 Q20 2 21 9" stroke="#222" stroke-width="2.2" fill="none" stroke-linecap="round"/>
+      <line x1="5" y1="7" x2="21" y2="7" stroke="#222" stroke-width="2.2" stroke-linecap="round"/>
+      <line x1="13" y1="18" x2="13" y2="23" stroke="#222" stroke-width="2" stroke-linecap="round"/>
+      <line x1="13" y1="23" x2="13" y2="44" stroke="#222" stroke-width="2.2" stroke-linecap="round"/>
+      <g style="transform-origin:13px 27px;animation:armL 0.6s ease-in-out infinite;">
+        <line x1="13" y1="25" x2="3" y2="38" stroke="#222" stroke-width="2" stroke-linecap="round"/>
+      </g>
+      <g style="transform-origin:13px 27px;animation:armR 0.6s ease-in-out infinite;">
+        <line x1="13" y1="25" x2="23" y2="38" stroke="#222" stroke-width="2" stroke-linecap="round"/>
+      </g>
+      <g style="transform-origin:13px 44px;animation:legL 0.6s ease-in-out infinite;">
+        <line x1="13" y1="44" x2="5" y2="60" stroke="#222" stroke-width="2" stroke-linecap="round"/>
+        <line x1="5" y1="60" x2="2" y2="65" stroke="#222" stroke-width="1.8" stroke-linecap="round"/>
+      </g>
+      <g style="transform-origin:13px 44px;animation:legR 0.6s ease-in-out infinite;">
+        <line x1="13" y1="44" x2="21" y2="60" stroke="#222" stroke-width="2" stroke-linecap="round"/>
+        <line x1="21" y1="60" x2="24" y2="65" stroke="#222" stroke-width="1.8" stroke-linecap="round"/>
+      </g>
+    </svg>
+
+    <!-- Aysha (back, female) -->
+    <svg class="char-svg" width="28" height="70" viewBox="0 0 28 70" style="animation-delay:0.18s;">
+      <circle cx="14" cy="10" r="8.5" fill="rgb(245,245,220)" stroke="#222" stroke-width="2"/>
+      <!-- long hair sides -->
+      <path d="M6 8 Q5 18 7 36" stroke="#222" stroke-width="2.8" fill="none" stroke-linecap="round"/>
+      <path d="M22 8 Q23 18 21 36" stroke="#222" stroke-width="2.8" fill="none" stroke-linecap="round"/>
+      <path d="M6 8 Q7 2 14 2 Q21 2 22 8" stroke="#222" stroke-width="2.2" fill="none" stroke-linecap="round"/>
+      <!-- bun -->
+      <circle cx="14" cy="3" r="3.5" fill="rgb(245,245,220)" stroke="#222" stroke-width="2"/>
+      <line x1="14" y1="18" x2="14" y2="23" stroke="#222" stroke-width="2" stroke-linecap="round"/>
+      <!-- dress body -->
+      <path d="M14 23 L8 45 L20 45 Z" fill="none" stroke="#222" stroke-width="2" stroke-linejoin="round"/>
+      <line x1="14" y1="23" x2="14" y2="45" stroke="#222" stroke-width="2" stroke-linecap="round"/>
+      <g style="transform-origin:14px 28px;animation:armR 0.6s ease-in-out infinite;">
+        <line x1="14" y1="26" x2="4" y2="38" stroke="#222" stroke-width="2" stroke-linecap="round"/>
+      </g>
+      <g style="transform-origin:14px 28px;animation:armL 0.6s ease-in-out infinite;">
+        <line x1="14" y1="26" x2="24" y2="38" stroke="#222" stroke-width="2" stroke-linecap="round"/>
+      </g>
+      <g style="transform-origin:14px 45px;animation:legR 0.6s ease-in-out infinite;">
+        <line x1="14" y1="45" x2="6" y2="62" stroke="#222" stroke-width="2" stroke-linecap="round"/>
+        <line x1="6" y1="62" x2="3" y2="68" stroke="#222" stroke-width="1.8" stroke-linecap="round"/>
+      </g>
+      <g style="transform-origin:14px 45px;animation:legL 0.6s ease-in-out infinite;">
+        <line x1="14" y1="45" x2="22" y2="62" stroke="#222" stroke-width="2" stroke-linecap="round"/>
+        <line x1="22" y1="62" x2="25" y2="68" stroke="#222" stroke-width="1.8" stroke-linecap="round"/>
+      </g>
+    </svg>
+  </div>
+
+  <button id="nav-up"   onclick="moveUp()">↑</button>
+  <button id="nav-down" onclick="moveDown()">↓</button>
+
+  <div id="hud">
+    <div class="hud-badge" id="hud-f">🌸 0</div>
+    <div class="hud-badge" id="hud-s">1/5</div>
+  </div>
+  <div id="section-label" id="sec-label"></div>
+
+  <div id="plant-modal">
+    <div class="modal-card">
+      <h3>Plant a flower 🌱</h3>
+      <div class="flower-picker" id="flower-picker"></div>
+      <div class="who-picker">
+        <button class="who-btn active" id="who-him" onclick="setWho('him')">Talha</button>
+        <button class="who-btn"        id="who-her" onclick="setWho('her')">Aysha</button>
+      </div>
+      <textarea class="msg-input" id="flower-msg" placeholder="Leave a message 💌" rows="2" maxlength="80"></textarea>
+      <div class="modal-btns">
+        <button class="btn-plant"  onclick="confirmPlant()">Plant 🌱</button>
+        <button class="btn-cancel" onclick="closePlantModal()">Cancel</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="info-modal">
+    <div class="info-card">
+      <div id="info-flower"></div>
+      <div class="info-who"  id="info-who"></div>
+      <div class="info-date" id="info-date"></div>
+      <div class="info-msg"  id="info-msg"></div>
+      <button class="close-btn" onclick="closeInfoModal()">Close</button>
+    </div>
+  </div>
+
+  <div id="toast"></div>
+</div>
+
+<script>
+// ─────────────────────────────────────────
+// FLOWER SVG (stickman pen style, 22×48 viewbox)
+// Each flower: stem + leaves + head, black lines on transparent
+// ─────────────────────────────────────────
+const F = {
+  rose:`
+    <line x1="11" y1="47" x2="11" y2="28" stroke="#222" stroke-width="1.8" stroke-linecap="round"/>
+    <path d="M11 38 Q6 36 5 32" fill="none" stroke="#222" stroke-width="1.4" stroke-linecap="round"/>
+    <path d="M11 38 Q16 36 17 32" fill="none" stroke="#222" stroke-width="1.4" stroke-linecap="round"/>
+    <path d="M11 28 Q7 23 8 18 Q11 15 11 12 Q11 15 14 18 Q15 23 11 28Z" fill="none" stroke="#222" stroke-width="1.7" stroke-linejoin="round"/>
+    <path d="M8 22 Q5 20 6 16" fill="none" stroke="#222" stroke-width="1.3" stroke-linecap="round"/>
+    <path d="M14 22 Q17 20 16 16" fill="none" stroke="#222" stroke-width="1.3" stroke-linecap="round"/>
+    <circle cx="11" cy="19" r="3" fill="none" stroke="#222" stroke-width="1.6"/>`,
+  tulip:`
+    <line x1="11" y1="47" x2="11" y2="27" stroke="#222" stroke-width="1.8" stroke-linecap="round"/>
+    <path d="M11 38 Q6 35 5 31" fill="none" stroke="#222" stroke-width="1.4" stroke-linecap="round"/>
+    <path d="M11 38 Q16 35 17 31" fill="none" stroke="#222" stroke-width="1.4" stroke-linecap="round"/>
+    <path d="M6 27 Q5 17 11 12 Q17 17 16 27 Q14 31 11 31 Q8 31 6 27Z" fill="none" stroke="#222" stroke-width="1.8" stroke-linejoin="round"/>
+    <line x1="8" y1="27" x2="8" y2="19" stroke="#222" stroke-width="1.1" stroke-linecap="round"/>
+    <line x1="14" y1="27" x2="14" y2="19" stroke="#222" stroke-width="1.1" stroke-linecap="round"/>`,
+  sunflower:`
+    <line x1="11" y1="47" x2="11" y2="28" stroke="#222" stroke-width="2" stroke-linecap="round"/>
+    <path d="M11 38 Q6 36 5 32" fill="none" stroke="#222" stroke-width="1.4" stroke-linecap="round"/>
+    ${Array.from({length:8},(_,i)=>{const a=i*45*Math.PI/180,px=(11+8.5*Math.cos(a)).toFixed(1),py=(19+8.5*Math.sin(a)).toFixed(1);return `<ellipse cx="${px}" cy="${py}" rx="2.2" ry="4.5" fill="none" stroke="#222" stroke-width="1.5" transform="rotate(${i*45} ${px} ${py})"/>`;}).join('')}
+    <circle cx="11" cy="19" r="4.5" fill="none" stroke="#222" stroke-width="1.8"/>
+    <circle cx="11" cy="19" r="2.2" fill="none" stroke="#222" stroke-width="1.4"/>`,
+  daisy:`
+    <line x1="11" y1="47" x2="11" y2="28" stroke="#222" stroke-width="1.8" stroke-linecap="round"/>
+    <path d="M11 38 Q6 36 5 32" fill="none" stroke="#222" stroke-width="1.4" stroke-linecap="round"/>
+    ${Array.from({length:10},(_,i)=>{const a=i*36*Math.PI/180,px=(11+8*Math.cos(a)).toFixed(1),py=(19+8*Math.sin(a)).toFixed(1);return `<ellipse cx="${px}" cy="${py}" rx="1.8" ry="4.5" fill="none" stroke="#222" stroke-width="1.4" transform="rotate(${i*36} ${px} ${py})"/>`;}).join('')}
+    <circle cx="11" cy="19" r="3" fill="none" stroke="#222" stroke-width="1.6"/>`,
+  lily:`
+    <line x1="11" y1="47" x2="11" y2="28" stroke="#222" stroke-width="1.8" stroke-linecap="round"/>
+    <path d="M11 28 L6 16 Q11 22 11 12 Q11 22 16 16 Z" fill="none" stroke="#222" stroke-width="1.7" stroke-linejoin="round"/>
+    <path d="M11 28 L3 20 Q7 23 5 15" fill="none" stroke="#222" stroke-width="1.5" stroke-linecap="round"/>
+    <path d="M11 28 L19 20 Q15 23 17 15" fill="none" stroke="#222" stroke-width="1.5" stroke-linecap="round"/>
+    <line x1="9" y1="20" x2="7" y2="13" stroke="#222" stroke-width="1.1" stroke-linecap="round"/>
+    <line x1="11" y1="19" x2="11" y2="12" stroke="#222" stroke-width="1.1" stroke-linecap="round"/>
+    <line x1="13" y1="20" x2="15" y2="13" stroke="#222" stroke-width="1.1" stroke-linecap="round"/>
+    <circle cx="7"  cy="12" r="1.2" fill="#222"/>
+    <circle cx="11" cy="11" r="1.2" fill="#222"/>
+    <circle cx="15" cy="12" r="1.2" fill="#222"/>`,
+  orchid:`
+    <line x1="11" y1="47" x2="11" y2="28" stroke="#222" stroke-width="1.8" stroke-linecap="round"/>
+    <ellipse cx="11" cy="20" rx="4.5" ry="7" fill="none" stroke="#222" stroke-width="1.7"/>
+    <ellipse cx="4"  cy="19" rx="4.5" ry="3" fill="none" stroke="#222" stroke-width="1.4" transform="rotate(-35 4 19)"/>
+    <ellipse cx="18" cy="19" rx="4.5" ry="3" fill="none" stroke="#222" stroke-width="1.4" transform="rotate(35 18 19)"/>
+    <ellipse cx="5"  cy="26" rx="3.5" ry="2.5" fill="none" stroke="#222" stroke-width="1.3" transform="rotate(20 5 26)"/>
+    <ellipse cx="17" cy="26" rx="3.5" ry="2.5" fill="none" stroke="#222" stroke-width="1.3" transform="rotate(-20 17 26)"/>
+    <circle cx="11" cy="20" r="2" fill="none" stroke="#222" stroke-width="1.5"/>`,
+  carnation:`
+    <line x1="11" y1="47" x2="11" y2="28" stroke="#222" stroke-width="1.8" stroke-linecap="round"/>
+    <path d="M11 10 Q14 13 12 16 Q16 12 18 16 Q16 20 12 20 Q16 22 14 26 Q11 24 11 28 Q8 24 8 26 Q5 22 9 20 Q5 20 4 16 Q6 12 10 16 Q8 13 11 10Z" fill="none" stroke="#222" stroke-width="1.6" stroke-linejoin="round"/>`,
+  peony:`
+    <line x1="11" y1="47" x2="11" y2="28" stroke="#222" stroke-width="1.8" stroke-linecap="round"/>
+    <path d="M11 10 Q17 12 18 18 Q18 26 11 30 Q4 26 4 18 Q5 12 11 10Z" fill="none" stroke="#222" stroke-width="1.8"/>
+    <path d="M5 14 Q3 20 6 25" fill="none" stroke="#222" stroke-width="1.2" stroke-linecap="round"/>
+    <path d="M17 14 Q19 20 16 25" fill="none" stroke="#222" stroke-width="1.2" stroke-linecap="round"/>
+    <path d="M11 12 Q14 15 12 19 Q10 15 11 12Z" fill="none" stroke="#222" stroke-width="1.3"/>
+    <circle cx="11" cy="19" r="2.5" fill="none" stroke="#222" stroke-width="1.5"/>`,
+  anemone:`
+    <line x1="11" y1="47" x2="11" y2="28" stroke="#222" stroke-width="1.8" stroke-linecap="round"/>
+    ${[0,72,144,216,288].map(a=>{const r=a*Math.PI/180,px=(11+8*Math.cos(r)).toFixed(1),py=(19+8*Math.sin(r)).toFixed(1);return `<ellipse cx="${px}" cy="${py}" rx="3" ry="6" fill="none" stroke="#222" stroke-width="1.6" transform="rotate(${a} ${px} ${py})"/>`;}).join('')}
+    <circle cx="11" cy="19" r="4" fill="none" stroke="#222" stroke-width="1.7"/>
+    <circle cx="11" cy="19" r="2" fill="none" stroke="#222" stroke-width="1.4"/>`,
+  hibiscus:`
+    <line x1="11" y1="47" x2="11" y2="28" stroke="#222" stroke-width="1.8" stroke-linecap="round"/>
+    ${[0,72,144,216,288].map(a=>{const r=a*Math.PI/180,px=(11+8.5*Math.cos(r)).toFixed(1),py=(19+8.5*Math.sin(r)).toFixed(1);return `<path d="M11 19 Q${(+px-2.5).toFixed(1)} ${(+py-2).toFixed(1)} ${px} ${py} Q${(+px+2.5).toFixed(1)} ${(+py-2).toFixed(1)} 11 19" fill="none" stroke="#222" stroke-width="1.6"/>`;}).join('')}
+    <line x1="11" y1="19" x2="11" y2="11" stroke="#222" stroke-width="1.5" stroke-linecap="round"/>
+    <circle cx="11" cy="11" r="2" fill="none" stroke="#222" stroke-width="1.5"/>
+    <circle cx="11" cy="19" r="2.5" fill="none" stroke="#222" stroke-width="1.5"/>`,
+  camellia:`
+    <line x1="11" y1="47" x2="11" y2="28" stroke="#222" stroke-width="1.8" stroke-linecap="round"/>
+    <path d="M11 10 Q17 12 17 19 Q17 27 11 30 Q5 27 5 19 Q5 12 11 10Z" fill="none" stroke="#222" stroke-width="1.8"/>
+    <path d="M11 12 Q14 14 13 18 Q11 20 9 18 Q8 14 11 12Z" fill="none" stroke="#222" stroke-width="1.4"/>
+    <path d="M6 15 Q5 21 7 25" fill="none" stroke="#222" stroke-width="1.2" stroke-linecap="round"/>
+    <path d="M16 15 Q17 21 15 25" fill="none" stroke="#222" stroke-width="1.2" stroke-linecap="round"/>
+    <circle cx="11" cy="18" r="2" fill="none" stroke="#222" stroke-width="1.4"/>`,
+  gerbera:`
+    <line x1="11" y1="47" x2="11" y2="28" stroke="#222" stroke-width="1.8" stroke-linecap="round"/>
+    <path d="M11 38 Q6 36 5 32" fill="none" stroke="#222" stroke-width="1.4" stroke-linecap="round"/>
+    ${Array.from({length:12},(_,i)=>{const a=i*30*Math.PI/180,px=(11+8.5*Math.cos(a)).toFixed(1),py=(19+8.5*Math.sin(a)).toFixed(1);return `<ellipse cx="${px}" cy="${py}" rx="2" ry="5" fill="none" stroke="#222" stroke-width="1.4" transform="rotate(${i*30} ${px} ${py})"/>`;}).join('')}
+    <circle cx="11" cy="19" r="4" fill="none" stroke="#222" stroke-width="1.7"/>
+    <circle cx="11" cy="19" r="2" fill="none" stroke="#222" stroke-width="1.3"/>`,
+};
+
+const FLIST = [
+  {id:'rose',name:'Rose'},{id:'tulip',name:'Tulip'},{id:'sunflower',name:'Sunflower'},
+  {id:'daisy',name:'Daisy'},{id:'lily',name:'Lily'},{id:'orchid',name:'Orchid'},
+  {id:'carnation',name:'Carnation'},{id:'peony',name:'Peony'},{id:'anemone',name:'Anemone'},
+  {id:'hibiscus',name:'Hibiscus'},{id:'camellia',name:'Camellia'},{id:'gerbera',name:'Gerbera'},
+];
+
+function flowerSVG(id, w, h) {
+  return `<svg viewBox="0 0 22 48" width="${w}" height="${h}" xmlns="http://www.w3.org/2000/svg">${F[id]||''}</svg>`;
+}
+
+// SECTIONS: 5 sections, each has left+right garden bed
+const SECTIONS = [
+  { name:'Rose Valley',    lName:'Rose Garden',     rName:'Tulip Field',
+    lTheme:['rose','rose','camellia','tulip','rose','rose','camellia','tulip'],
+    rTheme:['tulip','tulip','peony','carnation','tulip','peony','tulip','orchid'] },
+  { name:'Sunny Meadow',   lName:'Sunflower Patch',  rName:'Daisy Hill',
+    lTheme:['sunflower','sunflower','daisy','sunflower','gerbera','sunflower','sunflower','daisy'],
+    rTheme:['daisy','daisy','gerbera','daisy','carnation','daisy','sunflower','daisy'] },
+  { name:'Lily Garden',    lName:'Lily Grove',       rName:'Orchid Corner',
+    lTheme:['lily','lily','anemone','lily','hibiscus','lily','lily','anemone'],
+    rTheme:['orchid','orchid','lily','anemone','orchid','orchid','daisy','orchid'] },
+  { name:'Blossom Park',   lName:'Peony Paradise',   rName:'Carnation Walk',
+    lTheme:['peony','peony','rose','peony','carnation','peony','peony','rose'],
+    rTheme:['carnation','carnation','gerbera','carnation','orchid','carnation','tulip','carnation'] },
+  { name:'Secret Garden',  lName:'Magic Garden',     rName:'Eternal Bloom',
+    lTheme:['hibiscus','rose','lily','orchid','camellia','gerbera','hibiscus','peony'],
+    rTheme:['anemone','peony','hibiscus','gerbera','tulip','camellia','rose','anemone'] },
+];
+
+const SH = 500; // section height px
+let curSec = 0;
+let plantTarget = null;
+let selF = 'rose';
+let selWho = 'him';
+let myF = [];
+try { myF = JSON.parse(localStorage.getItem('vg5')||'[]'); } catch(e){}
+function save(){ try{localStorage.setItem('vg5',JSON.stringify(myF));}catch(e){} }
+function fdef(id){ return FLIST.find(f=>f.id===id); }
+
+// ── BUILD WORLD ──
+function buildWorld() {
+  const world = document.getElementById('world');
+  const totalH = SECTIONS.length * SH + 200;
+
+  // Road SVG background
+  const roadSvg = document.createElementNS('http://www.w3.org/2000/svg','svg');
+  roadSvg.setAttribute('width','100%');
+  roadSvg.setAttribute('height', totalH);
+  roadSvg.style.cssText='position:absolute;top:0;left:0;pointer-events:none;';
+
+  let roadHTML = `
+    <rect x="210" y="0" width="60" height="${totalH}" fill="#d4c9a8"/>
+    <line x1="210" y1="0" x2="210" y2="${totalH}" stroke="#b8a880" stroke-width="2"/>
+    <line x1="270" y1="0" x2="270" y2="${totalH}" stroke="#b8a880" stroke-width="2"/>`;
+  for(let y=30; y<totalH; y+=45)
+    roadHTML += `<rect x="237" y="${y}" width="6" height="20" rx="2" fill="#e8ddb0"/>`;
+  // Grass strips at top of each section
+  SECTIONS.forEach((_,si) => {
+    const y = si*SH;
+    roadHTML += `<rect x="0" y="${y}" width="480" height="28" fill="#7ab648"/>
+      <path d="M0 28 ${Array.from({length:48},(_,i)=>`Q${i*10+5} 18 ${(i+1)*10} 28`).join(' ')}" fill="#7ab648" stroke="#4a8a2a" stroke-width="1.5"/>`;
+  });
+  roadSvg.innerHTML = roadHTML;
+  world.appendChild(roadSvg);
+
+  // Road dashes dividers (already in SVG above)
+  // Build garden beds
+  SECTIONS.forEach((sec, si) => {
+    [['left',sec.lName,sec.lTheme],['right',sec.rName,sec.rTheme]].forEach(([side,label,theme]) => {
+      buildBed(world, si, side, label, theme);
+    });
+  });
+
+  buildPicker();
+}
+
+function buildBed(world, si, side, label, theme) {
+  const yBase = si * SH;
+  const bed = document.createElement('div');
+  bed.className = 'garden-bed';
+  bed.style.top = (yBase + 36) + 'px';
+  bed.style.height = '240px';
+  if (side==='left') bed.style.right = 'calc(50% + 8px)';
+  else bed.style.left = 'calc(50% + 8px)';
+  bed.onclick = () => openPlant(si, side);
+
+  // Bed SVG (hand-drawn rectangle, soil texture)
+  const bedW = 148, bedH = 240;
+  bed.innerHTML = `
+    <svg width="${bedW}" height="${bedH}" viewBox="0 0 ${bedW} ${bedH}" style="position:absolute;top:0;left:0;pointer-events:none;">
+      <!-- soil background -->
+      <path d="M6 6 Q74 2 142 6 Q146 80 144 234 Q74 238 4 234 Q2 120 6 6Z"
+        fill="#a07040" stroke="#222" stroke-width="2.2" stroke-linejoin="round"/>
+      <!-- soil texture lines -->
+      ${Array.from({length:6},(_,i)=>`<path d="M${10+i*2} ${30+i*35} Q${50+i} ${26+i*35} ${90+i} ${30+i*35} Q${120+i} ${26+i*35} ${138-i} ${30+i*35}" fill="none" stroke="#7a5028" stroke-width="1" opacity="0.5"/>`).join('')}
+      <!-- label sign -->
+      <rect x="24" y="6" width="100" height="18" rx="4" fill="rgb(245,245,220)" stroke="#222" stroke-width="1.5"/>
+      <text x="74" y="19" text-anchor="middle" font-family="Caveat,cursive" font-size="12" fill="#333">${label}</text>
+    </svg>`;
+
+  // Flowers container
+  const fc = document.createElement('div');
+  fc.id = `fc-${si}-${side}`;
+  fc.style.cssText='position:absolute;top:28px;left:6px;right:6px;bottom:6px;display:grid;grid-template-columns:repeat(4,1fr);gap:2px;align-items:end;overflow:hidden;';
+  bed.appendChild(fc);
+
+  // Butterflies
+  for(let b=0;b<2;b++){
+    const bf=document.createElement('div');
+    bf.style.cssText=`position:absolute;font-size:13px;top:${-20-b*7}px;left:${12+b*58}px;pointer-events:none;animation:bfly ${(2.2+b*1.3).toFixed(1)}s ease-in-out ${(b*0.9).toFixed(1)}s infinite;`;
+    bf.textContent='🦋';
+    bed.appendChild(bf);
+  }
+
+  world.appendChild(bed);
+  renderBed(si, side, theme);
+}
+
+function renderBed(si, side, theme) {
+  const fc = document.getElementById(`fc-${si}-${side}`);
+  if (!fc) return;
+  fc.innerHTML = '';
+
+  const themeList = theme || (side==='left'? SECTIONS[si].lTheme : SECTIONS[si].rTheme);
+
+  // Theme flowers (decorative, small)
+  themeList.forEach(id => {
+    const cell = document.createElement('div');
+    cell.style.cssText='display:flex;flex-direction:column;align-items:center;justify-content:flex-end;pointer-events:none;';
+    cell.innerHTML = flowerSVG(id, 26, 52);
+    fc.appendChild(cell);
+  });
+
+  // User flowers
+  myF.filter(f=>f.si===si&&f.side===side).forEach(fl => {
+    const cell = document.createElement('div');
+    cell.style.cssText='display:flex;flex-direction:column;align-items:center;justify-content:flex-end;cursor:pointer;';
+    cell.innerHTML = flowerSVG(fl.fid, 28, 56);
+    const lbl = document.createElement('div');
+    lbl.style.cssText='font-size:7px;color:#f5e8c0;font-family:Caveat,cursive;margin-top:-2px;';
+    lbl.textContent = fl.who==='him'?'T':'A';
+    cell.appendChild(lbl);
+    cell.onclick = (e) => { e.stopPropagation(); openInfo(fl); };
+    fc.appendChild(cell);
+  });
+}
+
+function buildPicker() {
+  const p = document.getElementById('flower-picker');
+  FLIST.forEach(def => {
+    const opt = document.createElement('div');
+    opt.className = 'flower-opt' + (def.id===selF?' selected':'');
+    opt.dataset.id = def.id;
+    opt.innerHTML = flowerSVG(def.id, 32, 42) + `<span>${def.name}</span>`;
+    opt.onclick = () => {
+      document.querySelectorAll('.flower-opt').forEach(o=>o.classList.remove('selected'));
+      opt.classList.add('selected'); selF = def.id;
+    };
+    p.appendChild(opt);
+  });
+}
+
+// ── NAV ──
+function moveUp()   { if(curSec<=0){toast('You are at the start! 🌱');return;} curSec--; go(); }
+function moveDown() { if(curSec>=SECTIONS.length-1){toast('More gardens soon! 🌟');return;} curSec++; go(); }
+function go() {
+  document.getElementById('world').style.transform=`translateY(${-curSec*SH}px)`;
+  document.getElementById('hud-f').textContent=`🌸 ${myF.length}`;
+  document.getElementById('hud-s').textContent=`${curSec+1}/5`;
+  const el=document.getElementById('section-label');
+  el.textContent=SECTIONS[curSec].name; el.style.opacity='1';
+  clearTimeout(el._t); el._t=setTimeout(()=>el.style.opacity='0',2200);
+}
+
+// ── PLANT ──
+function openPlant(si,side){ plantTarget={si,side}; document.getElementById('flower-msg').value=''; document.getElementById('plant-modal').classList.add('visible'); }
+function closePlantModal()  { document.getElementById('plant-modal').classList.remove('visible'); plantTarget=null; }
+function setWho(w) {
+  selWho=w;
+  document.getElementById('who-him').className='who-btn'+(w==='him'?' active':'');
+  document.getElementById('who-her').className='who-btn'+(w==='her'?' active':'');
+}
+function confirmPlant() {
+  if(!plantTarget)return;
+  const fl={id:Date.now(),si:plantTarget.si,side:plantTarget.side,fid:selF,who:selWho,
+    msg:document.getElementById('flower-msg').value.trim(),
+    date:new Date().toLocaleDateString('en-GB')};
+  myF.push(fl); save(); closePlantModal();
+  renderBed(fl.si,fl.si,null); // refresh
+  renderBed(fl.si,fl.side,null);
+  document.getElementById('hud-f').textContent=`🌸 ${myF.length}`;
+  // bloom last
+  const fc=document.getElementById(`fc-${fl.si}-${fl.side}`);
+  if(fc&&fc.lastElementChild){const sv=fc.lastElementChild.querySelector('svg');if(sv)sv.classList.add('bloom');}
+  toast(`${fdef(selF).name} planted by ${fl.who==='him'?'Talha':'Aysha'}! 🌱`);
+}
+
+// ── INFO ──
+function openInfo(data){
+  document.getElementById('info-flower').innerHTML=flowerSVG(data.fid,60,130);
+  document.getElementById('info-who').textContent=`Planted by ${data.who==='him'?'Talha 💙':'Aysha 💗'}`;
+  document.getElementById('info-date').textContent=data.date;
+  document.getElementById('info-msg').textContent=data.msg||'(no message)';
+  document.getElementById('info-modal').classList.add('visible');
+}
+function closeInfoModal(){ document.getElementById('info-modal').classList.remove('visible'); }
+
+let toastT;
+function toast(m){const t=document.getElementById('toast');t.textContent=m;t.classList.add('show');clearTimeout(toastT);toastT=setTimeout(()=>t.classList.remove('show'),2500);}
+
+document.addEventListener('keydown',e=>{if(e.key==='ArrowUp')moveUp();if(e.key==='ArrowDown')moveDown();});
+
+buildWorld();
+document.getElementById('hud-f').textContent=`🌸 ${myF.length}`;
+// show first label
+setTimeout(()=>{const el=document.getElementById('section-label');el.textContent=SECTIONS[0].name;el.style.opacity='1';el._t=setTimeout(()=>el.style.opacity='0',2200);},300);
+</script>
+
+</div>
+
+<script>
+// ── SCREEN NAVIGATION ──
+function showScreen(id) {
+  document.querySelectorAll('.screen').forEach(s => {
+    s.classList.remove('active');
+    s.style.display = 'none';
+  });
+  const el = document.getElementById(id);
+  el.style.display = id === 'welcome-screen' ? 'flex' : (id === 'intro-screen' ? 'flex' : 'block');
+  el.classList.add('active');
+}
+
+function goStory()  { showScreen('intro-screen');  initIntro(); }
+function goGarden() { showScreen('garden-screen'); initGarden(); }
+
+// flag to avoid double init
+let introInited = false, gardenInited = false;
+
+// ── INTRO JS ──
+function initIntro() {
+  if (introInited) { step=0; showStep(0); return; }
+  introInited = true;
+  // patch enterGarden to go to garden screen instead of alert
+  window._origEnterGarden = window.enterGarden;
+  window.enterGarden = function(e) { if(e) e.stopPropagation(); goGarden(); };
+
+const SCRIPT = [
+  { speaker: 'him', name: 'Talha', text: "Heello my love!\nI heard you like flowers a lot?" },
+  { speaker: 'her', name: 'Aysha', text: "Yes, you heard right babe! 🥰" },
+  { speaker: 'him', name: 'Talha', text: "More than me? 🤨" },
+  { speaker: 'her', name: 'Aysha', text: "Yap 😶\nWhy is it any problem?" },
+  { speaker: 'him', name: 'Talha', text: "Nah never mind..!! 😒" },
+  { speaker: 'him', name: 'Talha', text: "But I miss you more than I remember you! 😫" },
+  { speaker: 'her', name: 'Aysha', text: "Really 👀\nLike how much?" },
+  { speaker: 'him', name: 'Talha', text: "Enough to build you something special. 😚" },
+  { speaker: 'her', name: 'Aysha', text: "Hmm! Interesting!" },
+  { speaker: 'him', name: 'Talha', text: "I created a virtual garden only for you darling! 😚" },
+  { speaker: 'her', name: 'Aysha', text: "Wow! That's... the sweetest thing anyone's ever done to me 🥺" },
+  { speaker: 'him', name: 'Talha', text: '', anim: 'hug' },
+  { speaker: 'her', name: 'Aysha', text: "Tnx 💕" },
+  { speaker: 'him', name: 'Talha', text: "Only tnx!! 😒 Never mind..😖" },
+  { speaker: 'him', name: 'Talha', text: "Come on, let's go to visit our virtual garden babe." },
+  { speaker: 'her', name: 'Aysha', text: "Yeeeeee!! Let's goooooo 🎉" },
+];
+
+let step = 0, typing = false, typeTimer = null, currentFull = '', currentPos = 0;
+let hugFrameTimer = null, currentHugFrame = 1;
+let heartInterval = null;
+
+
+function updateUI() {}
+
+function wrapText(text, maxChars) {
+  const words = text.split(' ');
+  const lines = [], cur = [''];
+  let c = '';
+  for (const w of words) {
+    const cand = c ? c + ' ' + w : w;
+    if (cand.length > maxChars) { lines.push(c); c = w; }
+    else c = cand;
+  }
+  if (c) lines.push(c);
+  return lines;
+}
+
+function renderBubbleText(elId, text) {
+  const el = document.getElementById(elId);
+  if (!el) return;
+  el.innerHTML = '';
+  // Split on explicit \n first, then wrap each segment
+  const segments = text.split('\n');
+  const lines = [];
+  segments.forEach(seg => wrapText(seg, 20).forEach(l => lines.push(l)));
+  const cx = elId === 'him-text' ? '278' : '242';
+  const totalH = (lines.length - 1) * 15;
+  const baseY = 150 - totalH / 2;
+  lines.forEach((line, i) => {
+    const ts = document.createElementNS('http://www.w3.org/2000/svg', 'tspan');
+    ts.setAttribute('x', cx);
+    if (i === 0) ts.setAttribute('y', String(baseY));
+    else ts.setAttribute('dy', '15');
+    ts.textContent = line;
+    el.appendChild(ts);
+  });
+}
+
+function typeInBubble(textId, text) {
+  typing = true; currentFull = text; currentPos = 0;
+  document.getElementById('click-hint').style.opacity = '0';
+  const el = document.getElementById(textId);
+  if (el) el.innerHTML = '';
+  function tick() {
+    currentPos++;
+    renderBubbleText(textId, currentFull.slice(0, currentPos));
+    if (currentPos < currentFull.length) typeTimer = setTimeout(tick, 34);
+    else { typing = false; document.getElementById('click-hint').style.opacity = '1'; }
+  }
+  tick();
+}
+
+function showHugFrame(n) {
+  for (let i = 1; i <= 4; i++) {
+    const f = document.getElementById('bf' + i);
+    if (f) f.style.display = i === n ? 'block' : 'none';
+  }
+}
+
+function startHugAnimation() {
+  currentHugFrame = 1;
+  showHugFrame(1);
+  hugFrameTimer = setInterval(() => {
+    currentHugFrame = currentHugFrame >= 4 ? 1 : currentHugFrame + 1;
+    showHugFrame(currentHugFrame);
+  }, 700);
+}
+
+function stopHugAnimation() {
+  clearInterval(hugFrameTimer);
+  for (let i = 1; i <= 4; i++) {
+    const f = document.getElementById('bf' + i);
+    if (f) f.style.display = 'none';
+  }
+  
+}
+
+function spawnHearts() {
+  clearInterval(heartInterval);
+  heartInterval = setInterval(() => {
+    const scene = document.getElementById('intro-scene');
+    const h = document.createElement('div');
+    const emojis = ['💕','💗','💖','😘','🌸','💝'];
+    h.style.cssText = 'position:absolute;font-size:'+(14+Math.random()*10)+'px;'
+      +'left:'+(20+Math.random()*60)+'%;bottom:'+(30+Math.random()*40)+'%;'
+      +'animation:floatHeart 1.2s ease-out forwards;pointer-events:none;z-index:20;';
+    h.textContent = emojis[Math.floor(Math.random()*emojis.length)];
+    scene.appendChild(h);
+    setTimeout(() => h.remove(), 1300);
+  }, 240);
+}
+
+function stopHearts() { clearInterval(heartInterval); }
+
+function showStep(idx) {
+  if (idx >= SCRIPT.length) { showEnd(); return; }
+  const line = SCRIPT[idx];
+
+  document.getElementById('him-bubble').classList.add('hidden');
+  document.getElementById('her-bubble').classList.add('hidden');
+  document.getElementById('hug-bubble').classList.add('hidden');
+  stopHearts();
+  stopHugAnimation();
+  updateUI();
+
+  // Show "Reality" label only on the Tnx step (first after hug)
+  const realityLabel = document.getElementById('reality-label');
+  if (realityLabel) {
+    realityLabel.style.opacity = (line.text === 'Tnx 💕') ? '1' : '0';
+  }
+
+  if (line.anim === 'hug') {
+    document.getElementById('him-char').style.opacity = '1';
+    document.getElementById('her-char').style.opacity = '0.28';
+    document.getElementById('hug-bubble').classList.remove('hidden');
+    document.getElementById('click-hint').style.opacity = '1';
+    typing = false;
+    startHugAnimation();
+    spawnHearts();
+    return;
+  }
+
+  document.getElementById('him-char').style.opacity = line.speaker === 'him' ? '1' : '0.28';
+  document.getElementById('her-char').style.opacity = line.speaker === 'her' ? '1' : '0.28';
+  const bubbleId = line.speaker === 'him' ? 'him-bubble' : 'her-bubble';
+  const textId   = line.speaker === 'him' ? 'him-text'   : 'her-text';
+  document.getElementById(bubbleId).classList.remove('hidden');
+  typeInBubble(textId, line.text);
+}
+
+function advance() {
+  if (typing) {
+    clearTimeout(typeTimer); typing = false;
+    const line = SCRIPT[step];
+    if (!line.anim) renderBubbleText(line.speaker === 'him' ? 'him-text' : 'her-text', currentFull);
+    document.getElementById('click-hint').style.opacity = '1';
+    return;
+  }
+  stopHearts(); stopHugAnimation();
+  step++;
+  if (step >= SCRIPT.length) showEnd();
+  else showStep(step);
+}
+
+function showEnd() {
+  stopHearts(); stopHugAnimation();
+  document.getElementById('end-overlay').classList.add('visible');
+  document.getElementById('click-hint').style.display = 'none';
+}
+
+function skipToGarden(e) {
+  e.stopPropagation();
+  stopHearts(); stopHugAnimation();
+  showEnd();
+}
+
+function enterGarden(e) {
+  e.stopPropagation();
+  alert('🌸 Benvenuto nel giardino!');
+}
+
+showStep(0);
+
+  // re-patch after JS runs
+  window.enterGarden = function(e) { if(e) e.stopPropagation(); goGarden(); };
+}
+
+// ── GARDEN JS ──
+function initGarden() {
+  if (gardenInited) return;
+  gardenInited = true;
+
+// ─────────────────────────────────────────
+// FLOWER SVG (stickman pen style, 22×48 viewbox)
+// Each flower: stem + leaves + head, black lines on transparent
+// ─────────────────────────────────────────
+const F = {
+  rose:`
+    <line x1="11" y1="47" x2="11" y2="28" stroke="#222" stroke-width="1.8" stroke-linecap="round"/>
+    <path d="M11 38 Q6 36 5 32" fill="none" stroke="#222" stroke-width="1.4" stroke-linecap="round"/>
+    <path d="M11 38 Q16 36 17 32" fill="none" stroke="#222" stroke-width="1.4" stroke-linecap="round"/>
+    <path d="M11 28 Q7 23 8 18 Q11 15 11 12 Q11 15 14 18 Q15 23 11 28Z" fill="none" stroke="#222" stroke-width="1.7" stroke-linejoin="round"/>
+    <path d="M8 22 Q5 20 6 16" fill="none" stroke="#222" stroke-width="1.3" stroke-linecap="round"/>
+    <path d="M14 22 Q17 20 16 16" fill="none" stroke="#222" stroke-width="1.3" stroke-linecap="round"/>
+    <circle cx="11" cy="19" r="3" fill="none" stroke="#222" stroke-width="1.6"/>`,
+  tulip:`
+    <line x1="11" y1="47" x2="11" y2="27" stroke="#222" stroke-width="1.8" stroke-linecap="round"/>
+    <path d="M11 38 Q6 35 5 31" fill="none" stroke="#222" stroke-width="1.4" stroke-linecap="round"/>
+    <path d="M11 38 Q16 35 17 31" fill="none" stroke="#222" stroke-width="1.4" stroke-linecap="round"/>
+    <path d="M6 27 Q5 17 11 12 Q17 17 16 27 Q14 31 11 31 Q8 31 6 27Z" fill="none" stroke="#222" stroke-width="1.8" stroke-linejoin="round"/>
+    <line x1="8" y1="27" x2="8" y2="19" stroke="#222" stroke-width="1.1" stroke-linecap="round"/>
+    <line x1="14" y1="27" x2="14" y2="19" stroke="#222" stroke-width="1.1" stroke-linecap="round"/>`,
+  sunflower:`
+    <line x1="11" y1="47" x2="11" y2="28" stroke="#222" stroke-width="2" stroke-linecap="round"/>
+    <path d="M11 38 Q6 36 5 32" fill="none" stroke="#222" stroke-width="1.4" stroke-linecap="round"/>
+    ${Array.from({length:8},(_,i)=>{const a=i*45*Math.PI/180,px=(11+8.5*Math.cos(a)).toFixed(1),py=(19+8.5*Math.sin(a)).toFixed(1);return `<ellipse cx="${px}" cy="${py}" rx="2.2" ry="4.5" fill="none" stroke="#222" stroke-width="1.5" transform="rotate(${i*45} ${px} ${py})"/>`;}).join('')}
+    <circle cx="11" cy="19" r="4.5" fill="none" stroke="#222" stroke-width="1.8"/>
+    <circle cx="11" cy="19" r="2.2" fill="none" stroke="#222" stroke-width="1.4"/>`,
+  daisy:`
+    <line x1="11" y1="47" x2="11" y2="28" stroke="#222" stroke-width="1.8" stroke-linecap="round"/>
+    <path d="M11 38 Q6 36 5 32" fill="none" stroke="#222" stroke-width="1.4" stroke-linecap="round"/>
+    ${Array.from({length:10},(_,i)=>{const a=i*36*Math.PI/180,px=(11+8*Math.cos(a)).toFixed(1),py=(19+8*Math.sin(a)).toFixed(1);return `<ellipse cx="${px}" cy="${py}" rx="1.8" ry="4.5" fill="none" stroke="#222" stroke-width="1.4" transform="rotate(${i*36} ${px} ${py})"/>`;}).join('')}
+    <circle cx="11" cy="19" r="3" fill="none" stroke="#222" stroke-width="1.6"/>`,
+  lily:`
+    <line x1="11" y1="47" x2="11" y2="28" stroke="#222" stroke-width="1.8" stroke-linecap="round"/>
+    <path d="M11 28 L6 16 Q11 22 11 12 Q11 22 16 16 Z" fill="none" stroke="#222" stroke-width="1.7" stroke-linejoin="round"/>
+    <path d="M11 28 L3 20 Q7 23 5 15" fill="none" stroke="#222" stroke-width="1.5" stroke-linecap="round"/>
+    <path d="M11 28 L19 20 Q15 23 17 15" fill="none" stroke="#222" stroke-width="1.5" stroke-linecap="round"/>
+    <line x1="9" y1="20" x2="7" y2="13" stroke="#222" stroke-width="1.1" stroke-linecap="round"/>
+    <line x1="11" y1="19" x2="11" y2="12" stroke="#222" stroke-width="1.1" stroke-linecap="round"/>
+    <line x1="13" y1="20" x2="15" y2="13" stroke="#222" stroke-width="1.1" stroke-linecap="round"/>
+    <circle cx="7"  cy="12" r="1.2" fill="#222"/>
+    <circle cx="11" cy="11" r="1.2" fill="#222"/>
+    <circle cx="15" cy="12" r="1.2" fill="#222"/>`,
+  orchid:`
+    <line x1="11" y1="47" x2="11" y2="28" stroke="#222" stroke-width="1.8" stroke-linecap="round"/>
+    <ellipse cx="11" cy="20" rx="4.5" ry="7" fill="none" stroke="#222" stroke-width="1.7"/>
+    <ellipse cx="4"  cy="19" rx="4.5" ry="3" fill="none" stroke="#222" stroke-width="1.4" transform="rotate(-35 4 19)"/>
+    <ellipse cx="18" cy="19" rx="4.5" ry="3" fill="none" stroke="#222" stroke-width="1.4" transform="rotate(35 18 19)"/>
+    <ellipse cx="5"  cy="26" rx="3.5" ry="2.5" fill="none" stroke="#222" stroke-width="1.3" transform="rotate(20 5 26)"/>
+    <ellipse cx="17" cy="26" rx="3.5" ry="2.5" fill="none" stroke="#222" stroke-width="1.3" transform="rotate(-20 17 26)"/>
+    <circle cx="11" cy="20" r="2" fill="none" stroke="#222" stroke-width="1.5"/>`,
+  carnation:`
+    <line x1="11" y1="47" x2="11" y2="28" stroke="#222" stroke-width="1.8" stroke-linecap="round"/>
+    <path d="M11 10 Q14 13 12 16 Q16 12 18 16 Q16 20 12 20 Q16 22 14 26 Q11 24 11 28 Q8 24 8 26 Q5 22 9 20 Q5 20 4 16 Q6 12 10 16 Q8 13 11 10Z" fill="none" stroke="#222" stroke-width="1.6" stroke-linejoin="round"/>`,
+  peony:`
+    <line x1="11" y1="47" x2="11" y2="28" stroke="#222" stroke-width="1.8" stroke-linecap="round"/>
+    <path d="M11 10 Q17 12 18 18 Q18 26 11 30 Q4 26 4 18 Q5 12 11 10Z" fill="none" stroke="#222" stroke-width="1.8"/>
+    <path d="M5 14 Q3 20 6 25" fill="none" stroke="#222" stroke-width="1.2" stroke-linecap="round"/>
+    <path d="M17 14 Q19 20 16 25" fill="none" stroke="#222" stroke-width="1.2" stroke-linecap="round"/>
+    <path d="M11 12 Q14 15 12 19 Q10 15 11 12Z" fill="none" stroke="#222" stroke-width="1.3"/>
+    <circle cx="11" cy="19" r="2.5" fill="none" stroke="#222" stroke-width="1.5"/>`,
+  anemone:`
+    <line x1="11" y1="47" x2="11" y2="28" stroke="#222" stroke-width="1.8" stroke-linecap="round"/>
+    ${[0,72,144,216,288].map(a=>{const r=a*Math.PI/180,px=(11+8*Math.cos(r)).toFixed(1),py=(19+8*Math.sin(r)).toFixed(1);return `<ellipse cx="${px}" cy="${py}" rx="3" ry="6" fill="none" stroke="#222" stroke-width="1.6" transform="rotate(${a} ${px} ${py})"/>`;}).join('')}
+    <circle cx="11" cy="19" r="4" fill="none" stroke="#222" stroke-width="1.7"/>
+    <circle cx="11" cy="19" r="2" fill="none" stroke="#222" stroke-width="1.4"/>`,
+  hibiscus:`
+    <line x1="11" y1="47" x2="11" y2="28" stroke="#222" stroke-width="1.8" stroke-linecap="round"/>
+    ${[0,72,144,216,288].map(a=>{const r=a*Math.PI/180,px=(11+8.5*Math.cos(r)).toFixed(1),py=(19+8.5*Math.sin(r)).toFixed(1);return `<path d="M11 19 Q${(+px-2.5).toFixed(1)} ${(+py-2).toFixed(1)} ${px} ${py} Q${(+px+2.5).toFixed(1)} ${(+py-2).toFixed(1)} 11 19" fill="none" stroke="#222" stroke-width="1.6"/>`;}).join('')}
+    <line x1="11" y1="19" x2="11" y2="11" stroke="#222" stroke-width="1.5" stroke-linecap="round"/>
+    <circle cx="11" cy="11" r="2" fill="none" stroke="#222" stroke-width="1.5"/>
+    <circle cx="11" cy="19" r="2.5" fill="none" stroke="#222" stroke-width="1.5"/>`,
+  camellia:`
+    <line x1="11" y1="47" x2="11" y2="28" stroke="#222" stroke-width="1.8" stroke-linecap="round"/>
+    <path d="M11 10 Q17 12 17 19 Q17 27 11 30 Q5 27 5 19 Q5 12 11 10Z" fill="none" stroke="#222" stroke-width="1.8"/>
+    <path d="M11 12 Q14 14 13 18 Q11 20 9 18 Q8 14 11 12Z" fill="none" stroke="#222" stroke-width="1.4"/>
+    <path d="M6 15 Q5 21 7 25" fill="none" stroke="#222" stroke-width="1.2" stroke-linecap="round"/>
+    <path d="M16 15 Q17 21 15 25" fill="none" stroke="#222" stroke-width="1.2" stroke-linecap="round"/>
+    <circle cx="11" cy="18" r="2" fill="none" stroke="#222" stroke-width="1.4"/>`,
+  gerbera:`
+    <line x1="11" y1="47" x2="11" y2="28" stroke="#222" stroke-width="1.8" stroke-linecap="round"/>
+    <path d="M11 38 Q6 36 5 32" fill="none" stroke="#222" stroke-width="1.4" stroke-linecap="round"/>
+    ${Array.from({length:12},(_,i)=>{const a=i*30*Math.PI/180,px=(11+8.5*Math.cos(a)).toFixed(1),py=(19+8.5*Math.sin(a)).toFixed(1);return `<ellipse cx="${px}" cy="${py}" rx="2" ry="5" fill="none" stroke="#222" stroke-width="1.4" transform="rotate(${i*30} ${px} ${py})"/>`;}).join('')}
+    <circle cx="11" cy="19" r="4" fill="none" stroke="#222" stroke-width="1.7"/>
+    <circle cx="11" cy="19" r="2" fill="none" stroke="#222" stroke-width="1.3"/>`,
+};
+
+const FLIST = [
+  {id:'rose',name:'Rose'},{id:'tulip',name:'Tulip'},{id:'sunflower',name:'Sunflower'},
+  {id:'daisy',name:'Daisy'},{id:'lily',name:'Lily'},{id:'orchid',name:'Orchid'},
+  {id:'carnation',name:'Carnation'},{id:'peony',name:'Peony'},{id:'anemone',name:'Anemone'},
+  {id:'hibiscus',name:'Hibiscus'},{id:'camellia',name:'Camellia'},{id:'gerbera',name:'Gerbera'},
+];
+
+function flowerSVG(id, w, h) {
+  return `<svg viewBox="0 0 22 48" width="${w}" height="${h}" xmlns="http://www.w3.org/2000/svg">${F[id]||''}</svg>`;
+}
+
+// SECTIONS: 5 sections, each has left+right garden bed
+const SECTIONS = [
+  { name:'Rose Valley',    lName:'Rose Garden',     rName:'Tulip Field',
+    lTheme:['rose','rose','camellia','tulip','rose','rose','camellia','tulip'],
+    rTheme:['tulip','tulip','peony','carnation','tulip','peony','tulip','orchid'] },
+  { name:'Sunny Meadow',   lName:'Sunflower Patch',  rName:'Daisy Hill',
+    lTheme:['sunflower','sunflower','daisy','sunflower','gerbera','sunflower','sunflower','daisy'],
+    rTheme:['daisy','daisy','gerbera','daisy','carnation','daisy','sunflower','daisy'] },
+  { name:'Lily Garden',    lName:'Lily Grove',       rName:'Orchid Corner',
+    lTheme:['lily','lily','anemone','lily','hibiscus','lily','lily','anemone'],
+    rTheme:['orchid','orchid','lily','anemone','orchid','orchid','daisy','orchid'] },
+  { name:'Blossom Park',   lName:'Peony Paradise',   rName:'Carnation Walk',
+    lTheme:['peony','peony','rose','peony','carnation','peony','peony','rose'],
+    rTheme:['carnation','carnation','gerbera','carnation','orchid','carnation','tulip','carnation'] },
+  { name:'Secret Garden',  lName:'Magic Garden',     rName:'Eternal Bloom',
+    lTheme:['hibiscus','rose','lily','orchid','camellia','gerbera','hibiscus','peony'],
+    rTheme:['anemone','peony','hibiscus','gerbera','tulip','camellia','rose','anemone'] },
+];
+
+const SH = 500; // section height px
+let curSec = 0;
+let plantTarget = null;
+let selF = 'rose';
+let selWho = 'him';
+let myF = [];
+try { myF = JSON.parse(localStorage.getItem('vg5')||'[]'); } catch(e){}
+function save(){ try{localStorage.setItem('vg5',JSON.stringify(myF));}catch(e){} }
+function fdef(id){ return FLIST.find(f=>f.id===id); }
+
+// ── BUILD WORLD ──
+function buildWorld() {
+  const world = document.getElementById('world');
+  const totalH = SECTIONS.length * SH + 200;
+
+  // Road SVG background
+  const roadSvg = document.createElementNS('http://www.w3.org/2000/svg','svg');
+  roadSvg.setAttribute('width','100%');
+  roadSvg.setAttribute('height', totalH);
+  roadSvg.style.cssText='position:absolute;top:0;left:0;pointer-events:none;';
+
+  let roadHTML = `
+    <rect x="210" y="0" width="60" height="${totalH}" fill="#d4c9a8"/>
+    <line x1="210" y1="0" x2="210" y2="${totalH}" stroke="#b8a880" stroke-width="2"/>
+    <line x1="270" y1="0" x2="270" y2="${totalH}" stroke="#b8a880" stroke-width="2"/>`;
+  for(let y=30; y<totalH; y+=45)
+    roadHTML += `<rect x="237" y="${y}" width="6" height="20" rx="2" fill="#e8ddb0"/>`;
+  // Grass strips at top of each section
+  SECTIONS.forEach((_,si) => {
+    const y = si*SH;
+    roadHTML += `<rect x="0" y="${y}" width="480" height="28" fill="#7ab648"/>
+      <path d="M0 28 ${Array.from({length:48},(_,i)=>`Q${i*10+5} 18 ${(i+1)*10} 28`).join(' ')}" fill="#7ab648" stroke="#4a8a2a" stroke-width="1.5"/>`;
+  });
+  roadSvg.innerHTML = roadHTML;
+  world.appendChild(roadSvg);
+
+  // Road dashes dividers (already in SVG above)
+  // Build garden beds
+  SECTIONS.forEach((sec, si) => {
+    [['left',sec.lName,sec.lTheme],['right',sec.rName,sec.rTheme]].forEach(([side,label,theme]) => {
+      buildBed(world, si, side, label, theme);
+    });
+  });
+
+  buildPicker();
+}
+
+function buildBed(world, si, side, label, theme) {
+  const yBase = si * SH;
+  const bed = document.createElement('div');
+  bed.className = 'garden-bed';
+  bed.style.top = (yBase + 36) + 'px';
+  bed.style.height = '240px';
+  if (side==='left') bed.style.right = 'calc(50% + 8px)';
+  else bed.style.left = 'calc(50% + 8px)';
+  bed.onclick = () => openPlant(si, side);
+
+  // Bed SVG (hand-drawn rectangle, soil texture)
+  const bedW = 148, bedH = 240;
+  bed.innerHTML = `
+    <svg width="${bedW}" height="${bedH}" viewBox="0 0 ${bedW} ${bedH}" style="position:absolute;top:0;left:0;pointer-events:none;">
+      <!-- soil background -->
+      <path d="M6 6 Q74 2 142 6 Q146 80 144 234 Q74 238 4 234 Q2 120 6 6Z"
+        fill="#a07040" stroke="#222" stroke-width="2.2" stroke-linejoin="round"/>
+      <!-- soil texture lines -->
+      ${Array.from({length:6},(_,i)=>`<path d="M${10+i*2} ${30+i*35} Q${50+i} ${26+i*35} ${90+i} ${30+i*35} Q${120+i} ${26+i*35} ${138-i} ${30+i*35}" fill="none" stroke="#7a5028" stroke-width="1" opacity="0.5"/>`).join('')}
+      <!-- label sign -->
+      <rect x="24" y="6" width="100" height="18" rx="4" fill="rgb(245,245,220)" stroke="#222" stroke-width="1.5"/>
+      <text x="74" y="19" text-anchor="middle" font-family="Caveat,cursive" font-size="12" fill="#333">${label}</text>
+    </svg>`;
+
+  // Flowers container
+  const fc = document.createElement('div');
+  fc.id = `fc-${si}-${side}`;
+  fc.style.cssText='position:absolute;top:28px;left:6px;right:6px;bottom:6px;display:grid;grid-template-columns:repeat(4,1fr);gap:2px;align-items:end;overflow:hidden;';
+  bed.appendChild(fc);
+
+  // Butterflies
+  for(let b=0;b<2;b++){
+    const bf=document.createElement('div');
+    bf.style.cssText=`position:absolute;font-size:13px;top:${-20-b*7}px;left:${12+b*58}px;pointer-events:none;animation:bfly ${(2.2+b*1.3).toFixed(1)}s ease-in-out ${(b*0.9).toFixed(1)}s infinite;`;
+    bf.textContent='🦋';
+    bed.appendChild(bf);
+  }
+
+  world.appendChild(bed);
+  renderBed(si, side, theme);
+}
+
+function renderBed(si, side, theme) {
+  const fc = document.getElementById(`fc-${si}-${side}`);
+  if (!fc) return;
+  fc.innerHTML = '';
+
+  const themeList = theme || (side==='left'? SECTIONS[si].lTheme : SECTIONS[si].rTheme);
+
+  // Theme flowers (decorative, small)
+  themeList.forEach(id => {
+    const cell = document.createElement('div');
+    cell.style.cssText='display:flex;flex-direction:column;align-items:center;justify-content:flex-end;pointer-events:none;';
+    cell.innerHTML = flowerSVG(id, 26, 52);
+    fc.appendChild(cell);
+  });
+
+  // User flowers
+  myF.filter(f=>f.si===si&&f.side===side).forEach(fl => {
+    const cell = document.createElement('div');
+    cell.style.cssText='display:flex;flex-direction:column;align-items:center;justify-content:flex-end;cursor:pointer;';
+    cell.innerHTML = flowerSVG(fl.fid, 28, 56);
+    const lbl = document.createElement('div');
+    lbl.style.cssText='font-size:7px;color:#f5e8c0;font-family:Caveat,cursive;margin-top:-2px;';
+    lbl.textContent = fl.who==='him'?'T':'A';
+    cell.appendChild(lbl);
+    cell.onclick = (e) => { e.stopPropagation(); openInfo(fl); };
+    fc.appendChild(cell);
+  });
+}
+
+function buildPicker() {
+  const p = document.getElementById('flower-picker');
+  FLIST.forEach(def => {
+    const opt = document.createElement('div');
+    opt.className = 'flower-opt' + (def.id===selF?' selected':'');
+    opt.dataset.id = def.id;
+    opt.innerHTML = flowerSVG(def.id, 32, 42) + `<span>${def.name}</span>`;
+    opt.onclick = () => {
+      document.querySelectorAll('.flower-opt').forEach(o=>o.classList.remove('selected'));
+      opt.classList.add('selected'); selF = def.id;
+    };
+    p.appendChild(opt);
+  });
+}
+
+// ── NAV ──
+function moveUp()   { if(curSec<=0){toast('You are at the start! 🌱');return;} curSec--; go(); }
+function moveDown() { if(curSec>=SECTIONS.length-1){toast('More gardens soon! 🌟');return;} curSec++; go(); }
+function go() {
+  document.getElementById('world').style.transform=`translateY(${-curSec*SH}px)`;
+  document.getElementById('hud-f').textContent=`🌸 ${myF.length}`;
+  document.getElementById('hud-s').textContent=`${curSec+1}/5`;
+  const el=document.getElementById('section-label');
+  el.textContent=SECTIONS[curSec].name; el.style.opacity='1';
+  clearTimeout(el._t); el._t=setTimeout(()=>el.style.opacity='0',2200);
+}
+
+// ── PLANT ──
+function openPlant(si,side){ plantTarget={si,side}; document.getElementById('flower-msg').value=''; document.getElementById('plant-modal').classList.add('visible'); }
+function closePlantModal()  { document.getElementById('plant-modal').classList.remove('visible'); plantTarget=null; }
+function setWho(w) {
+  selWho=w;
+  document.getElementById('who-him').className='who-btn'+(w==='him'?' active':'');
+  document.getElementById('who-her').className='who-btn'+(w==='her'?' active':'');
+}
+function confirmPlant() {
+  if(!plantTarget)return;
+  const fl={id:Date.now(),si:plantTarget.si,side:plantTarget.side,fid:selF,who:selWho,
+    msg:document.getElementById('flower-msg').value.trim(),
+    date:new Date().toLocaleDateString('en-GB')};
+  myF.push(fl); save(); closePlantModal();
+  renderBed(fl.si,fl.si,null); // refresh
+  renderBed(fl.si,fl.side,null);
+  document.getElementById('hud-f').textContent=`🌸 ${myF.length}`;
+  // bloom last
+  const fc=document.getElementById(`fc-${fl.si}-${fl.side}`);
+  if(fc&&fc.lastElementChild){const sv=fc.lastElementChild.querySelector('svg');if(sv)sv.classList.add('bloom');}
+  toast(`${fdef(selF).name} planted by ${fl.who==='him'?'Talha':'Aysha'}! 🌱`);
+}
+
+// ── INFO ──
+function openInfo(data){
+  document.getElementById('info-flower').innerHTML=flowerSVG(data.fid,60,130);
+  document.getElementById('info-who').textContent=`Planted by ${data.who==='him'?'Talha 💙':'Aysha 💗'}`;
+  document.getElementById('info-date').textContent=data.date;
+  document.getElementById('info-msg').textContent=data.msg||'(no message)';
+  document.getElementById('info-modal').classList.add('visible');
+}
+function closeInfoModal(){ document.getElementById('info-modal').classList.remove('visible'); }
+
+let toastT;
+function toast(m){const t=document.getElementById('toast');t.textContent=m;t.classList.add('show');clearTimeout(toastT);toastT=setTimeout(()=>t.classList.remove('show'),2500);}
+
+document.addEventListener('keydown',e=>{if(e.key==='ArrowUp')moveUp();if(e.key==='ArrowDown')moveDown();});
+
+buildWorld();
+document.getElementById('hud-f').textContent=`🌸 ${myF.length}`;
+// show first label
+setTimeout(()=>{const el=document.getElementById('section-label');el.textContent=SECTIONS[0].name;el.style.opacity='1';el._t=setTimeout(()=>el.style.opacity='0',2200);},300);
+
+}
+</script>
+</body>
+</html>
