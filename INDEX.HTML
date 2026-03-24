@@ -1228,11 +1228,26 @@ function showScreen(id) {
   el.classList.add('active');
 }
 
-function goStory()  { showScreen('intro-screen');  initIntro(); }
-function goGarden() { showScreen('garden-screen'); initGarden(); }
+function goStory()  {
+  showScreen('intro-screen');
+  initIntro();
+  // Always restart story from the first line when Story is chosen.
+  if (typeof step !== 'undefined') step = 0;
+  if (typeof showStep === 'function') showStep(0);
+}
+function goGarden() {
+  showScreen('garden-screen');
+  initGarden();
+}
 
 // flag to avoid double init
 let introInited = false, gardenInited = false;
+
+// Keep intro final button consistent: after story, go to garden.
+window.enterGarden = function(e) {
+  if (e) e.stopPropagation();
+  goGarden();
+};
 
 // ── INTRO JS ──
 function initIntro() {
@@ -1741,6 +1756,9 @@ document.getElementById('hud-f').textContent=`🌸 ${myF.length}`;
 setTimeout(()=>{const el=document.getElementById('section-label');el.textContent=SECTIONS[0].name;el.style.opacity='1';el._t=setTimeout(()=>el.style.opacity='0',2200);},300);
 
 }
+
+// Ensure first screen is always the choice screen.
+showScreen('welcome-screen');
 </script>
 </body>
 </html>
