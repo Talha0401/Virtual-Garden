@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8">
+  <title>Giardino Virtuale</title>
+  <style>
+    body {
+      margin: 0;
+      background-color: rgb(245,245,220);
+      overflow: hidden;
+    }
+    canvas { display: block; }
+  </style>
+</head>
+<body>
+<canvas id="canvas"></canvas>
+
+<script>
+const canvas = document.getElementById("canvas");
+const ctx = canvas.getContext("2d");
+
+function resize() {
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
+}
+window.addEventListener("resize", resize);
+resize();
+
+let offsetY = 0;
+
+window.addEventListener("wheel", (e) => {
+  offsetY += e.deltaY * 0.5;
+});
+
+function drawRoad() {
+  const lineOffset = 80;
+  ctx.strokeStyle = "black";
+  ctx.lineWidth = 5;
+
+  ctx.beginPath();
+  ctx.moveTo(canvas.width/2 - lineOffset, 0 + offsetY);
+  ctx.lineTo(canvas.width/2 - lineOffset, canvas.height + offsetY);
+  ctx.stroke();
+
+  ctx.beginPath();
+  ctx.moveTo(canvas.width/2 + lineOffset, 0 + offsetY);
+  ctx.lineTo(canvas.width/2 + lineOffset, canvas.height + offsetY);
+  ctx.stroke();
+}
+
+function drawRectangles() {
+  const rectWidth = 400;
+  const rectHeight = 450;
+  const distanceFromRoad = 170;
+  const startY = canvas.height - rectHeight - 50; // in basso
+
+  // un rettangolo a sinistra
+  ctx.strokeRect(canvas.width/2 - distanceFromRoad - rectWidth, startY + offsetY, rectWidth, rectHeight);
+
+  // un rettangolo a destra
+  ctx.strokeRect(canvas.width/2 + distanceFromRoad, startY + offsetY, rectWidth, rectHeight);
+}
+
+function drawStickman(x, y, isFemale = false) {
+  ctx.strokeStyle = "black";
+  ctx.lineWidth = 2;
+
+  ctx.beginPath();
+  ctx.arc(x, y - 20, 8, 0, Math.PI * 2);
+  ctx.stroke();
+
+  ctx.beginPath();
+  ctx.moveTo(x, y - 12);
+  ctx.lineTo(x, y + 10);
+  ctx.stroke();
+
+  ctx.beginPath();
+  ctx.moveTo(x - 10, y);
+  ctx.lineTo(x + 10, y);
+  ctx.stroke();
+
+  ctx.beginPath();
+  ctx.moveTo(x, y + 10);
+  ctx.lineTo(x - 8, y + 25);
+  ctx.moveTo(x, y + 10);
+  ctx.lineTo(x + 8, y + 25);
+  ctx.stroke();
+
+  if (isFemale) {
+    ctx.beginPath();
+    ctx.moveTo(x - 6, y + 10);
+    ctx.lineTo(x + 6, y + 10);
+    ctx.lineTo(x, y + 20);
+    ctx.closePath();
+    ctx.stroke();
+
+    ctx.beginPath();
+    ctx.moveTo(x, y - 12);
+    ctx.lineTo(x, y - 25);
+    ctx.stroke();
+  }
+}
+
+function drawNames(x, y, name) {
+  ctx.fillStyle = "black";
+  ctx.font = "14px Arial";
+  ctx.textAlign = "center";
+  ctx.fillText(name, x, y + 40);
+}
+
+function draw() {
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+  drawRoad();
+  drawRectangles();
+
+  const centerX = canvas.width / 2;
+  const bottomY = canvas.height - 80;
+
+  drawStickman(centerX - 40, bottomY, false);
+  drawNames(centerX - 40, bottomY, "Talha");
+
+  drawStickman(centerX + 40, bottomY, true);
+  drawNames(centerX + 40, bottomY, "Aysha");
+
+  requestAnimationFrame(draw);
+}
+
+draw();
+</script>
+</body>
+</html>
