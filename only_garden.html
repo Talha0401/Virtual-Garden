@@ -15,9 +15,17 @@
 <body>
 <canvas id="canvas"></canvas>
 
+<!-- 👇 AGGIUNTO: bottoni navigazione -->
+<div style="position: fixed; right: 30px; top: 50%; transform: translateY(-50%); display: flex; flex-direction: column; gap: 15px; z-index: 10;">
+  <button onclick="scrollUp()" style="width: 50px; height: 50px; font-size: 22px; border-radius: 50%; border: 2px solid black; background: rgb(245,245,220); cursor: pointer;">↑</button>
+  <button onclick="scrollDown()" style="width: 50px; height: 50px; font-size: 22px; border-radius: 50%; border: 2px solid black; background: rgb(245,245,220); cursor: pointer;">↓</button>
+</div>
+
 <script>
 const canvas = document.getElementById("canvas");
 const ctx = canvas.getContext("2d");
+
+const worldHeight = 2300;
 
 function resize() {
   canvas.width = window.innerWidth;
@@ -30,7 +38,17 @@ let offsetY = 0;
 
 window.addEventListener("wheel", (e) => {
   offsetY += e.deltaY * 0.5;
+  offsetY = Math.max(0, Math.min(offsetY, worldHeight - canvas.height));
 });
+
+// 👇 AGGIUNTO: funzioni bottoni
+function scrollUp() {
+  offsetY = Math.min(worldHeight - canvas.height, offsetY + 300);
+}
+
+function scrollDown() {
+  offsetY = Math.max(0, offsetY - 300);
+}
 
 function drawRoad() {
   const lineOffset = 80;
@@ -38,24 +56,38 @@ function drawRoad() {
   ctx.lineWidth = 5;
 
   ctx.beginPath();
-  ctx.moveTo(canvas.width/2 - lineOffset, 0 + offsetY);
-  ctx.lineTo(canvas.width/2 - lineOffset, canvas.height + offsetY);
+  ctx.moveTo(canvas.width/2 - lineOffset, -offsetY);
+  ctx.lineTo(canvas.width/2 - lineOffset, worldHeight - offsetY);
   ctx.stroke();
 
   ctx.beginPath();
-  ctx.moveTo(canvas.width/2 + lineOffset, 0 + offsetY);
-  ctx.lineTo(canvas.width/2 + lineOffset, canvas.height + offsetY);
+  ctx.moveTo(canvas.width/2 + lineOffset, -offsetY);
+  ctx.lineTo(canvas.width/2 + lineOffset, worldHeight - offsetY);
   ctx.stroke();
 }
 
 function drawRectangles() {
-  const rectWidth = 300;
-  const rectHeight = 380;
+  const rectWidth = 200;
+  const rectHeight = 280;
   const distanceFromRoad = 150;
-  const startY = canvas.height - rectHeight - 50; // in basso
+  const startY = canvas.height - rectHeight - 250;
 
-  // un rettangolo a sinistra
-  ctx.strokeRect(canvas.width/2 - distanceFromRoad - rectWidth, startY + offsetY, rectWidth, rectHeight);
+  const rect1X = canvas.width/2 - distanceFromRoad - rectWidth;
+  const rect2X = canvas.width/2 + distanceFromRoad;
+
+  // Sinistra
+  ctx.strokeRect(rect1X, startY + offsetY, rectWidth, rectHeight);
+  ctx.strokeRect(rect1X, startY - rectHeight - 120 + offsetY, rectWidth, rectHeight);
+  ctx.strokeRect(rect1X, startY - (rectHeight + 120) * 2 + offsetY, rectWidth, rectHeight);
+  ctx.strokeRect(rect1X, startY - (rectHeight + 120) * 3 + offsetY, rectWidth, rectHeight);
+  ctx.strokeRect(rect1X, startY - (rectHeight + 120) * 4 + offsetY, rectWidth, rectHeight);
+
+  // Destra
+  ctx.strokeRect(rect2X, startY + offsetY, rectWidth, rectHeight);
+  ctx.strokeRect(rect2X, startY - rectHeight - 120 + offsetY, rectWidth, rectHeight);
+  ctx.strokeRect(rect2X, startY - (rectHeight + 120) * 2 + offsetY, rectWidth, rectHeight);
+  ctx.strokeRect(rect2X, startY - (rectHeight + 120) * 3 + offsetY, rectWidth, rectHeight);
+  ctx.strokeRect(rect2X, startY - (rectHeight + 120) * 4 + offsetY, rectWidth, rectHeight);
 }
 
 function drawStickman(x, y, isFemale = false) {
