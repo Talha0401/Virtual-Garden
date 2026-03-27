@@ -49,16 +49,13 @@ function drawRoad() {
 }
 
 function drawRectangles() {
-  const rectWidth = 400;
-  const rectHeight = 450;
-  const distanceFromRoad = 170;
+  const rectWidth = 300;
+  const rectHeight = 380;
+  const distanceFromRoad = 150;
   const startY = canvas.height - rectHeight - 50; // in basso
 
   // un rettangolo a sinistra
   ctx.strokeRect(canvas.width/2 - distanceFromRoad - rectWidth, startY + offsetY, rectWidth, rectHeight);
-
-  // un rettangolo a destra
-  ctx.strokeRect(canvas.width/2 + distanceFromRoad, startY + offsetY, rectWidth, rectHeight);
 }
 
 function drawStickman(x, y, isFemale = false) {
