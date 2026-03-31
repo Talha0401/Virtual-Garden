@@ -34,11 +34,25 @@
 </style>
 
 <!-- Bouquet button -->
-<div style="position: fixed; right: 30px; top: calc(50% - 130px); z-index: 11;">
-  <button onclick="alert('Bouquet')" style="display:flex; align-items:center; gap:8px; padding:10px 14px; border-radius:12px; border:2px solid black; background:rgb(245,245,220); cursor:pointer; font-weight:bold;">
-    <img width="24" height="24" src="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><circle cx='32' cy='20' r='10' fill='pink'/><circle cx='22' cy='30' r='8' fill='red'/><circle cx='42' cy='30' r='8' fill='yellow'/><path d='M32 30 L32 60' stroke='green' stroke-width='4'/></svg>"/>
-    Bouquet
+<div style="position: fixed; right: 20px; top: calc(50% - 230px); z-index: 11; text-align:center;">
+  <button onclick="alert('Bouquet')" style="border:none; background:none; cursor:pointer; padding:0;">
+    <!-- forma reale bouquet (senza box) -->
+    <svg width="70" height="90" viewBox="0 0 64 80">
+      <!-- fiori -->
+      <circle cx="32" cy="18" r="10" fill="pink"/>
+      <circle cx="18" cy="28" r="8" fill="red"/>
+      <circle cx="46" cy="28" r="8" fill="yellow"/>
+      <circle cx="26" cy="35" r="6" fill="purple"/>
+      <circle cx="38" cy="35" r="6" fill="orange"/>
+
+      <!-- gambo -->
+      <path d="M32 35 L28 70 L36 70 Z" fill="green"/>
+
+      <!-- nastro -->
+      <path d="M26 55 Q32 60 38 55" stroke="gold" stroke-width="3" fill="none"/>
+    </svg>
   </button>
+  <div style="font-size:12px; font-weight:bold; margin-top:2px;">Bouquet</div>
 </div>
 
 <!-- Arrow controls -->
