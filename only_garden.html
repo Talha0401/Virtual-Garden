@@ -4,18 +4,44 @@
   <meta charset="UTF-8">
   <title>Giardino Virtuale</title>
   <style>
-    body {
-      margin: 0;
-      background-color: rgb(245,245,220);
-      overflow: hidden;
-    }
+    body { margin: 0; background-color: rgb(245,245,220); overflow: hidden; }
     canvas { display: block; }
   </style>
 </head>
 <body>
 <canvas id="canvas"></canvas>
 
-<!-- 👇 AGGIUNTO: bottoni navigazione -->
+<div id="labels"></div>
+
+<style>
+  #labels{
+    position: fixed;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 5;
+  }
+  .label{
+    position: absolute;
+    writing-mode: vertical-lr;
+    font-weight: bold;
+    font-family: Arial;
+    font-size: 14px;
+    color: black;
+  }
+</style>
+
+<!-- Bouquet button -->
+<div style="position: fixed; right: 30px; top: calc(50% - 130px); z-index: 11;">
+  <button onclick="alert('Bouquet')" style="display:flex; align-items:center; gap:8px; padding:10px 14px; border-radius:12px; border:2px solid black; background:rgb(245,245,220); cursor:pointer; font-weight:bold;">
+    <img width="24" height="24" src="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><circle cx='32' cy='20' r='10' fill='pink'/><circle cx='22' cy='30' r='8' fill='red'/><circle cx='42' cy='30' r='8' fill='yellow'/><path d='M32 30 L32 60' stroke='green' stroke-width='4'/></svg>"/>
+    Bouquet
+  </button>
+</div>
+
+<!-- Arrow controls -->
 <div style="position: fixed; right: 30px; top: 50%; transform: translateY(-50%); display: flex; flex-direction: column; gap: 15px; z-index: 10;">
   <button onclick="scrollUp()" style="width: 50px; height: 50px; font-size: 22px; border-radius: 50%; border: 2px solid black; background: rgb(245,245,220); cursor: pointer;">↑</button>
   <button onclick="scrollDown()" style="width: 50px; height: 50px; font-size: 22px; border-radius: 50%; border: 2px solid black; background: rgb(245,245,220); cursor: pointer;">↓</button>
@@ -27,34 +53,31 @@ const ctx = canvas.getContext("2d");
 
 const worldHeight = 2300;
 
-function resize() {
-  canvas.width = window.innerWidth;
-  canvas.height = window.innerHeight;
-}
+function resize() { canvas.width = window.innerWidth; canvas.height = window.innerHeight; }
 window.addEventListener("resize", resize);
 resize();
 
 let offsetY = 0;
-
 window.addEventListener("wheel", (e) => {
   offsetY += e.deltaY * 0.5;
   offsetY = Math.max(0, Math.min(offsetY, worldHeight - canvas.height));
 });
 
-// 👇 AGGIUNTO: funzioni bottoni
-function scrollUp() {
-  offsetY = Math.min(worldHeight - canvas.height, offsetY + 300);
-}
+function scrollUp() { offsetY = Math.min(worldHeight - canvas.height, offsetY + 300); }
+function scrollDown() { offsetY = Math.max(0, offsetY - 300); }
 
-function scrollDown() {
-  offsetY = Math.max(0, offsetY - 300);
+function drawGrass() {
+  ctx.fillStyle = "#7ec850";
+  ctx.fillRect(0, 0, canvas.width, canvas.height);
 }
 
 function drawRoad() {
   const lineOffset = 80;
+  ctx.fillStyle = "rgb(227,189,82)";
+  ctx.fillRect(canvas.width/2 - lineOffset, 0, lineOffset * 2, canvas.height);
+
   ctx.strokeStyle = "black";
   ctx.lineWidth = 5;
-
   ctx.beginPath();
   ctx.moveTo(canvas.width/2 - lineOffset, -offsetY);
   ctx.lineTo(canvas.width/2 - lineOffset, worldHeight - offsetY);
@@ -66,6 +89,36 @@ function drawRoad() {
   ctx.stroke();
 }
 
+// 🌸 FIORI (tutti definiti)
+function stem(x,y,len=12){ ctx.strokeStyle="green"; ctx.beginPath(); ctx.moveTo(x,y); ctx.lineTo(x,y+len); ctx.stroke(); }
+function dot(x,y,r,c){ ctx.fillStyle=c; ctx.beginPath(); ctx.arc(x,y,r,0,Math.PI*2); ctx.fill(); }
+
+function drawRose(x,y){ stem(x,y); dot(x,y,4,"red"); }
+function drawTulip(x,y){ stem(x,y); ctx.fillStyle="pink"; ctx.fillRect(x-3,y-5,6,6); }
+function drawOrchid(x,y){ stem(x,y); dot(x,y,5,"purple"); }
+function drawAnemone(x,y){ stem(x,y); dot(x,y,4,"blue"); }
+function drawZinnia(x,y){ stem(x,y); ctx.fillStyle="orange"; ctx.fillRect(x-3,y-3,6,6); }
+function drawRanunculus(x,y){ stem(x,y); dot(x,y,4,"yellow"); }
+function drawSunflower(x,y){ stem(x,y,14); dot(x,y,5,"gold"); }
+function drawLily(x,y){ stem(x,y,12); ctx.fillStyle="white"; ctx.fillRect(x-3,y-4,6,6); }
+function drawDaisy(x,y){ stem(x,y); dot(x,y,4,"white"); }
+function drawPeony(x,y){ stem(x,y); dot(x,y,5,"deeppink"); }
+
+function drawFlowerGrid(x, y, w, h, drawFn) {
+  for (let fx = x + 20; fx < x + w - 20; fx += 30) {
+    for (let fy = y + 20; fy < y + h - 20; fy += 30) {
+      drawFn(fx, fy);
+    }
+  }
+}
+
+function drawLabel(text, x, y) {
+  ctx.font = "bold 14px Arial";
+  ctx.fillStyle = "black";
+  ctx.textAlign = "left";
+  ctx.fillText(text, x, y);
+}
+
 function drawRectangles() {
   const rectWidth = 200;
   const rectHeight = 280;
@@ -75,120 +128,116 @@ function drawRectangles() {
   const rect1X = canvas.width/2 - distanceFromRoad - rectWidth;
   const rect2X = canvas.width/2 + distanceFromRoad;
 
-  // Sinistra
-  ctx.strokeRect(rect1X, startY + offsetY, rectWidth, rectHeight);
-  ctx.strokeRect(rect1X, startY - rectHeight - 120 + offsetY, rectWidth, rectHeight);
-  ctx.strokeRect(rect1X, startY - (rectHeight + 120) * 2 + offsetY, rectWidth, rectHeight);
-  ctx.strokeRect(rect1X, startY - (rectHeight + 120) * 3 + offsetY, rectWidth, rectHeight);
-  ctx.strokeRect(rect1X, startY - (rectHeight + 120) * 4 + offsetY, rectWidth, rectHeight);
+  ctx.fillStyle = "#c89b6d";
+  ctx.strokeStyle = "black";
 
-  // Destra
-  ctx.strokeRect(rect2X, startY + offsetY, rectWidth, rectHeight);
-  ctx.strokeRect(rect2X, startY - rectHeight - 120 + offsetY, rectWidth, rectHeight);
-  ctx.strokeRect(rect2X, startY - (rectHeight + 120) * 2 + offsetY, rectWidth, rectHeight);
-  ctx.strokeRect(rect2X, startY - (rectHeight + 120) * 3 + offsetY, rectWidth, rectHeight);
-  ctx.strokeRect(rect2X, startY - (rectHeight + 120) * 4 + offsetY, rectWidth, rectHeight);
+  const leftNames = ["Rose", "Tulip", "Orchid", "Anemone", "Zinnia"];
+  const rightNames = ["Ranunculus", "Sunflower", "Lily", "Daisy", "Peony"];
+
+  const labels = document.getElementById("labels");
+  labels.innerHTML = "";
+
+  for (let i = 0; i < 5; i++) {
+    let y = startY - i * (rectHeight + 120) + offsetY;
+
+    // SINISTRA
+    ctx.fillRect(rect1X, y, rectWidth, rectHeight);
+    ctx.strokeRect(rect1X, y, rectWidth, rectHeight);
+
+    if (i === 0) drawFlowerGrid(rect1X, y, rectWidth, rectHeight, drawRose);
+    if (i === 1) drawFlowerGrid(rect1X, y, rectWidth, rectHeight, drawTulip);
+    if (i === 2) drawFlowerGrid(rect1X, y, rectWidth, rectHeight, drawOrchid);
+    if (i === 3) drawFlowerGrid(rect1X, y, rectWidth, rectHeight, drawAnemone);
+    if (i === 4) drawFlowerGrid(rect1X, y, rectWidth, rectHeight, drawZinnia);
+
+    // label sinistra (HTML verticale)
+    const l1 = document.createElement("div");
+    l1.className = "label";
+    l1.style.left = (rect1X - 30) + "px";
+    l1.style.top = (y + rectHeight/2 - 40) + "px";
+    l1.textContent = leftNames[i];
+    labels.appendChild(l1);
+
+    // DESTRA
+    ctx.fillRect(rect2X, y, rectWidth, rectHeight);
+    ctx.strokeRect(rect2X, y, rectWidth, rectHeight);
+
+    if (i === 0) drawFlowerGrid(rect2X, y, rectWidth, rectHeight, drawRanunculus);
+    if (i === 1) drawFlowerGrid(rect2X, y, rectWidth, rectHeight, drawSunflower);
+    if (i === 2) drawFlowerGrid(rect2X, y, rectWidth, rectHeight, drawLily);
+    if (i === 3) drawFlowerGrid(rect2X, y, rectWidth, rectHeight, drawDaisy);
+    if (i === 4) drawFlowerGrid(rect2X, y, rectWidth, rectHeight, drawPeony);
+
+    // label destra (HTML verticale)
+    const l2 = document.createElement("div");
+    l2.className = "label";
+    l2.style.left = (rect2X + rectWidth + 10) + "px";
+    l2.style.top = (y + rectHeight/2 - 40) + "px";
+    l2.textContent = rightNames[i];
+    labels.appendChild(l2);
+  }
 }
 
 function drawStickman(x, y, isFemale = false) {
-  ctx.strokeStyle = "black";
-  ctx.fillStyle = "black";
+  const skin = "#f1c27d";
+  const maleColor = "#3498db";
+  const femaleColor = "#ff69b4";
+
   ctx.lineWidth = 2.5;
 
-  // Testa
+  // testa
+  ctx.fillStyle = skin;
+  ctx.strokeStyle = "black";
   ctx.beginPath();
   ctx.arc(x, y - 45, 14, 0, Math.PI * 2);
+  ctx.fill();
   ctx.stroke();
 
-  if (isFemale) {
-    // Capelli lunghi
-    ctx.beginPath();
-    ctx.moveTo(x - 14, y - 45);
-    ctx.quadraticCurveTo(x - 22, y - 20, x - 18, y);
-    ctx.stroke();
-    ctx.beginPath();
-    ctx.moveTo(x + 14, y - 45);
-    ctx.quadraticCurveTo(x + 22, y - 20, x + 18, y);
-    ctx.stroke();
-    // Capelli sopra
-    ctx.beginPath();
-    ctx.arc(x, y - 59, 14, Math.PI, 0);
-    ctx.stroke();
-  } else {
-    // Capelli corti maschio
-    ctx.beginPath();
-    ctx.arc(x, y - 59, 14, Math.PI, 0);
-    ctx.lineWidth = 5;
-    ctx.stroke();
-    ctx.lineWidth = 2.5;
-  }
-
-  // Collo
+  // collo
   ctx.beginPath();
   ctx.moveTo(x, y - 31);
   ctx.lineTo(x, y - 22);
   ctx.stroke();
 
+  // corpo
   if (isFemale) {
-    // Vestito (corpo a triangolo)
+    ctx.fillStyle = femaleColor;
     ctx.beginPath();
     ctx.moveTo(x - 10, y - 22);
     ctx.lineTo(x + 10, y - 22);
     ctx.lineTo(x + 18, y + 20);
     ctx.lineTo(x - 18, y + 20);
     ctx.closePath();
+    ctx.fill();
     ctx.stroke();
-
-    // Braccia
-    ctx.beginPath();
-    ctx.moveTo(x - 10, y - 18);
-    ctx.quadraticCurveTo(x - 28, y - 5, x - 22, y + 10);
-    ctx.stroke();
-    ctx.beginPath();
-    ctx.moveTo(x + 10, y - 18);
-    ctx.quadraticCurveTo(x + 28, y - 5, x + 22, y + 10);
-    ctx.stroke();
-
-    // Gambe
-    ctx.beginPath();
-    ctx.moveTo(x - 8, y + 20);
-    ctx.lineTo(x - 10, y + 50);
-    ctx.stroke();
-    ctx.beginPath();
-    ctx.moveTo(x + 8, y + 20);
-    ctx.lineTo(x + 10, y + 50);
-    ctx.stroke();
-
   } else {
-    // Corpo maschio (rettangolo)
+    ctx.fillStyle = maleColor;
     ctx.beginPath();
     ctx.moveTo(x - 10, y - 22);
     ctx.lineTo(x + 10, y - 22);
     ctx.lineTo(x + 10, y + 10);
     ctx.lineTo(x - 10, y + 10);
     ctx.closePath();
-    ctx.stroke();
-
-    // Braccia
-    ctx.beginPath();
-    ctx.moveTo(x - 10, y - 18);
-    ctx.quadraticCurveTo(x - 28, y - 5, x - 20, y + 12);
-    ctx.stroke();
-    ctx.beginPath();
-    ctx.moveTo(x + 10, y - 18);
-    ctx.quadraticCurveTo(x + 28, y - 5, x + 20, y + 12);
-    ctx.stroke();
-
-    // Gambe
-    ctx.beginPath();
-    ctx.moveTo(x - 5, y + 10);
-    ctx.lineTo(x - 8, y + 50);
-    ctx.stroke();
-    ctx.beginPath();
-    ctx.moveTo(x + 5, y + 10);
-    ctx.lineTo(x + 8, y + 50);
+    ctx.fill();
     ctx.stroke();
   }
+
+  // 🆕 BRACCIA
+  ctx.strokeStyle = "black";
+  ctx.beginPath();
+  ctx.moveTo(x - 10, y - 15);
+  ctx.lineTo(x - 25, y + 5);
+  ctx.moveTo(x + 10, y - 15);
+  ctx.lineTo(x + 25, y + 5);
+  ctx.stroke();
+
+  // gambe
+  ctx.beginPath();
+  ctx.moveTo(x - 5, y + 10);
+  ctx.lineTo(x - 8, y + 50);
+  ctx.moveTo(x + 5, y + 10);
+  ctx.lineTo(x + 8, y + 50);
+  ctx.stroke();
 }
 
 function drawNames(x, y, name) {
@@ -201,6 +250,7 @@ function drawNames(x, y, name) {
 function draw() {
   ctx.clearRect(0, 0, canvas.width, canvas.height);
 
+  drawGrass();
   drawRoad();
   drawRectangles();
 
